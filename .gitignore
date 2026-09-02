@@ -1,0 +1,30 @@
+# --- macOS ---
+.DS_Store
+
+# --- Windows ---
+Thumbs.db
+
+# --- Python & Django ---
+__pycache__/
+*.py[cod]
+*$py.class
+*.sqlite3
+db.sqlite3
+
+# --- Virtual Environments ---
+myenv/
+venv/
+env/
+
+# --- Environment Variables ---
+.env
+
+# --- IDEs & Editors ---
+.vscode/
+.idea/
+
+# --- Linux & Terminal Editors ---
+*~
+*.swp
+*.swo
+.Trash-*
