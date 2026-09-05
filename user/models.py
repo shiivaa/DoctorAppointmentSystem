@@ -1,6 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser
-from Appointment.models import *
+from appointment.models import *
 
 # Create your models here.
 class OTP(models.Model):
