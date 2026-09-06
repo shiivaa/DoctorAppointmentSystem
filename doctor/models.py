@@ -13,9 +13,7 @@ class Specialty(models.Model):
 
 
 class Doctor(models.Model):
-    first_name = models.CharField(max_length=50)
-    last_name = models.CharField(max_length=50)
-    medical_council_code = models.CharField(max_length=20, unique=True)
+    user = models.OneToOneField("user.User", on_delete=models.CASCADE, null=True, blank=True, related_name="doctor_profile")
     specialty = models.ForeignKey(Specialty, on_delete=models.SET_NULL, null=True, blank=True)
     visit_fee = models.DecimalField(max_digits=9, decimal_places=0, default=0)
     bio = models.TextField(blank=True)
@@ -24,7 +22,7 @@ class Doctor(models.Model):
         ordering = ["last_name", "first_name"]
 
     def __str__(self):
-        return f"Dr. {self.first_name} {self.last_name}"
+        return f"Dr. {self.user.first_name} {self.user.last_name}"
 
 
 class TimeSlot(models.Model):
