@@ -2,7 +2,10 @@ from django.db.models import Avg
 from django.utils import timezone
 from django.core.exceptions import PermissionDenied
 
-from .models import Feedback,Patient,Appointment
+from .models import Feedback
+from user.models import Patient
+from appointment.models import Appointment
+from doctor.models import TimeSlot
 
 
 #this function verified the condition for writing a feedback
@@ -13,7 +16,7 @@ def can_patient_submit_feedback(patient: Patient, appointment: Appointment):
         raise PermissionDenied("You are not allowed to leave feedback for this appointment.")
 
     #appointment time is passed
-    if appointment.start_time >= timezone.now():
+    if appointment.timeslot.start_time >= timezone.now():
         raise PermissionDenied("You can only leave feedback for past appointments.")
     #the first time feedback is registered for this appointment
     if hasattr(appointment, 'feedback'):
@@ -24,11 +27,6 @@ def can_patient_submit_feedback(patient: Patient, appointment: Appointment):
 #this function return average of rates confirmed for this doctor
 def get_doctor_average_rating(doctor):
     #calculate average of confirmed rate
-    result = Feedback.objects.filter(
-        doctor=doctor, 
-        is_confirmed=True
-    ).aggregate(
-        average_rating=Avg('rate')
-    )
+    result = Feedback.objects.filter(doctor=doctor, is_confirmed=True).aggregate(average_rating=Avg('rate') )
     #if there is no confirmed rate return 0
-    return result['average_rating'] or 0.0
+    return round(result, 1) if result is not None else 0.0
