@@ -10,17 +10,17 @@ def can_patient_submit_feedback(patient: Patient, appointment: Appointment):
     
     #check patient who write comment the same as visited patient
     if appointment.patient != patient:
-        raise PermissionDenied("You are not authorized to leave feedback for this appointment.")
+        raise PermissionDenied("You are not allowed to leave feedback for this appointment.")
 
     #appointment time is passed
     if appointment.start_time >= timezone.now():
         raise PermissionDenied("You can only leave feedback for past appointments.")
     #the first time feedback is registered for this appointment
     if hasattr(appointment, 'feedback'):
-        raise PermissionDenied("Feedback has already been submitted for this appointment.")
+        raise PermissionDenied("One feedback has already been submitted for this appointment.")
     
     return True
-git
+
 #this function return average of rates confirmed for this doctor
 def get_doctor_average_rating(doctor):
     #calculate average of confirmed rating 
