@@ -22,6 +22,7 @@ class Feedback(models.Model):
     rate=models.PositiveSmallIntegerField(choices=Rate.choices, default=Rate.AVERAGE, validators=[MinValueValidator(1),MaxValueValidator(5)],help_text=_("Please choose rank between 1 and 5"))
     created_at=models.DateTimeField(auto_now_add=True,verbose_name=_("Created At"))
     updated_at=models.DateTimeField(auto_now=True,verbose_name=_("Updated At"))
+    is_confirmed= models.BooleanField(default=False,verbose_name=_('Is Published'),help_text=_('Designates whether this feedback is publicly visible. Staff must approve it.'),)
 
     def __str__(self):
         return f"Feedback By {self.patient.username} for {self.doctor.first_name} {self.doctor.last_name} : rate {self.rate}"
