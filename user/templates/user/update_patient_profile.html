@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Update Patient Profile</title>
+</head>
+<body>
+
+    <h1>Update Patient Profile</h1>
+
+    <form method="POST" action="{% url 'update_patient_profile' %}">
+        {% csrf_token %}
+
+        {{ form.first_name.label_tag }}
+        {{ form.first_name }}
+        {{ form.first_name.errors }}
+
+        <br><br>
+
+        {{ form.last_name.label_tag }}
+        {{ form.last_name }}
+        {{ form.last_name.errors }}
+
+        <br><br>
+
+        {{ form.email.label_tag }}
+        {{ form.email }}
+        {{ form.email.errors }}
+
+        <br><br>
+
+        {{ form.gender.label_tag }}
+        {{ form.gender }}
+        {{ form.gender.errors }}
+
+        <br><br>
+
+        {{ form.national_code.label_tag }}
+        {{ form.national_code }}
+        {{ form.national_code.errors }}
+
+        <br><br>
+
+        {{ form.birth_date.label_tag }}
+        {{ form.birth_date }}
+        {{ form.birth_date.errors }}
+
+        <br><br>
+
+        {{ form.insurance_number.label_tag }}
+        {{ form.insurance_number }}
+        {{ form.insurance_number.errors }}
+
+        <br><br>
+
+        {{ form.address.label_tag }}
+        {{ form.address }}
+        {{ form.address.errors }}
+
+        <br><br>
+
+        {{ form.non_field_errors }}
+
+        <button type="submit">
+            Save
+        </button>
+    </form>
+
+    <br>
+
+    <a href="{% url 'patient_profile' %}">
+        Back to Profile
+    </a>
+
+</body>
+</html>

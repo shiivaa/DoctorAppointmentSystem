@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Patient Profile</title>
+</head>
+<body>
+
+    <h1>Patient Profile</h1>
+
+    <h2>User Information</h2>
+
+    <p>Username: {{ user.username }}</p>
+    <p>First Name: {{ user.first_name }}</p>
+    <p>Last Name: {{ user.last_name }}</p>
+    <p>Phone: {{ user.phone }}</p>
+    <p>Gender: {{ user.gender }}</p>
+    <p>National Code: {{ user.national_code }}</p>
+    <p>Birth Date: {{ user.birth_date }}</p>
+
+    {% if patient %}
+
+        <h2>Patient Information</h2>
+
+        <p>Insurance Number: {{ patient.insurance_number }}</p>
+        <p>Address: {{ patient.address }}</p>
+
+        <a href="{% url 'update_patient_profile' %}">
+            Update Profile
+        </a>
+
+    {% else %}
+
+        <p>Patient profile is not completed.</p>
+
+        <a href="{% url 'update_patient_profile' %}">
+            Complete Patient Profile
+        </a>
+
+    {% endif %}
+
+    <br><br>
+
+    <a href="{% url 'home' %}">
+        Back to Home
+    </a>
+
+</body>
+</html>

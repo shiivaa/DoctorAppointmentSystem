@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Home</title>
+</head>
+<body>
+
+    <h1>Welcome to Doctor Appointment System</h1>
+
+    {% if request.user.is_authenticated %}
+
+        <p>
+            Welcome, {{ request.user.first_name }} {{ request.user.last_name }}
+        </p>
+
+        <hr>
+
+        <h2>Menu</h2>
+
+        <ul>
+            <li>
+                <a href="{% url 'patient_profile' %}">
+                    Patient Profile
+                </a>
+            </li>
+
+            <li>
+                <a href="{% url 'wallet' %}">
+                    Wallet
+                </a>
+            </li>
+
+            <li>
+                <a href="{% url 'transactions' %}">
+                    Transactions
+                </a>
+            </li>
+        </ul>
+
+        <form method="POST" action="{% url 'logout' %}">
+            {% csrf_token %}
+            <button type="submit">Logout</button>
+        </form>
+
+    {% else %}
+
+        <a href="{% url 'send_otp' %}">
+            Login
+        </a>
+
+    {% endif %}
+
+</body>
+</html>

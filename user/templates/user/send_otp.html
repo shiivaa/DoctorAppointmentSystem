@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Send OTP</title>
+</head>
+<body>
+
+    <h1>Login with OTP</h1>
+
+    <form method="POST" action="{% url 'send_otp' %}">
+        {% csrf_token %}
+
+        {{ form.phone.label_tag }}
+        {{ form.phone }}
+        {{ form.phone.errors }}
+
+        <br><br>
+
+        <button type="submit">Send OTP</button>
+
+    </form>
+
+</body>
+</html>

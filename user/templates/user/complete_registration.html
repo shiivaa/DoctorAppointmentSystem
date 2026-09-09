@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Complete Registration</title>
+</head>
+<body>
+
+    <h1>Complete Registration</h1>
+
+    <form method="POST" action="{% url 'complete_registration' %}">
+        {% csrf_token %}
+
+        {{ form.username.label_tag }}
+        {{ form.username }}
+        {{ form.username.errors }}
+
+        <br><br>
+
+        {{ form.password.label_tag }}
+        {{ form.password }}
+        {{ form.password.errors }}
+
+        <br><br>
+
+        {{ form.first_name.label_tag }}
+        {{ form.first_name }}
+        {{ form.first_name.errors }}
+
+        <br><br>
+
+        {{ form.last_name.label_tag }}
+        {{ form.last_name }}
+        {{ form.last_name.errors }}
+
+        <br><br>
+
+        {{ form.email.label_tag }}
+        {{ form.email }}
+        {{ form.email.errors }}
+
+        <br><br>
+
+        {{ form.gender.label_tag }}
+        {{ form.gender }}
+        {{ form.gender.errors }}
+
+        <br><br>
+
+        {{ form.national_code.label_tag }}
+        {{ form.national_code }}
+        {{ form.national_code.errors }}
+
+        <br><br>
+
+        {{ form.birth_date.label_tag }}
+        {{ form.birth_date }}
+        {{ form.birth_date.errors }}
+
+        <br><br>
+
+        {{ form.non_field_errors }}
+
+        <button type="submit">Register</button>
+
+    </form>
+
+</body>
+</html>
