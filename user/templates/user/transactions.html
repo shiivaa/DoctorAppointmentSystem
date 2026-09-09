@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Transactions</title>
+</head>
+<body>
+
+    <h1>Transactions</h1>
+
+    {% if transactions %}
+
+        {% for transaction in transactions %}
+
+            <div>
+                <p>ID: {{ transaction.id }}</p>
+                <p>Type: {{ transaction.type }}</p>
+                <p>Amount: {{ transaction.amount }}</p>
+                <p>Description: {{ transaction.description }}</p>
+                <p>Date: {{ transaction.date }}</p>
+                <p>Appointment ID: {{ transaction.appointment_id }}</p>
+            </div>
+
+            <hr>
+
+        {% endfor %}
+
+    {% else %}
+
+        <p>No transactions found.</p>
+
+    {% endif %}
+
+    <a href="{% url 'wallet' %}">
+        Back to Wallet
+    </a>
+
+    <br><br>
+
+    <a href="{% url 'home' %}">
+        Back to Home
+    </a>
+
+</body>
+</html>
