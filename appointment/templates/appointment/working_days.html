@@ -1,0 +1,212 @@
+
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Choose Appointment Day</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #f5f7fb;
+            color: #1f2937;
+        }
+
+        .page {
+            max-width: 1100px;
+            margin: 50px auto;
+            padding: 0 20px;
+        }
+
+        .header {
+            background: white;
+            border-radius: 16px;
+            padding: 28px;
+            margin-bottom: 25px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.06);
+        }
+
+        .header h1 {
+            margin: 0 0 8px;
+            font-size: 28px;
+        }
+
+        .doctor-name {
+            color: #4b5563;
+            margin: 0;
+            font-size: 16px;
+        }
+
+        .days-container {
+            background: white;
+            border-radius: 16px;
+            padding: 28px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.06);
+        }
+
+        .days-container h2 {
+            margin-top: 0;
+            margin-bottom: 20px;
+            font-size: 20px;
+        }
+
+        .days-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+            gap: 15px;
+        }
+
+        .day-card {
+            border: 1px solid #e5e7eb;
+            border-radius: 12px;
+            padding: 18px;
+            text-align: center;
+            background: #fafafa;
+        }
+
+        .day-card.available {
+            background: #ffffff;
+            border-color: #2563eb;
+            transition: 0.2s;
+        }
+
+        .day-card.available:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(37, 99, 235, 0.12);
+        }
+
+        .day-link {
+            text-decoration: none;
+            color: inherit;
+            display: block;
+        }
+
+        .date {
+            font-size: 18px;
+            font-weight: bold;
+            margin-bottom: 8px;
+        }
+
+        .status {
+            font-size: 13px;
+            color: #6b7280;
+        }
+
+        .available .status {
+            color: #2563eb;
+            font-weight: bold;
+        }
+
+        .unavailable {
+            opacity: 0.55;
+        }
+
+        .back-link {
+            display: inline-block;
+            margin-top: 25px;
+            color: #4b5563;
+            text-decoration: none;
+        }
+
+        .back-link:hover {
+            text-decoration: underline;
+        }
+
+        @media (max-width: 600px) {
+            .page {
+                margin-top: 25px;
+            }
+
+            .days-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="page">
+
+    <div class="header">
+
+        <h1>Choose an Appointment Day</h1>
+
+        <p class="doctor-name">
+            Doctor {{ doctor.first_name }} {{ doctor.last_name }}
+        </p>
+
+    </div>
+
+
+    <div class="days-container">
+
+        <h2>Available Days</h2>
+
+        <div class="days-grid">
+
+            {% for day in days %}
+
+                {% if day.is_working_day %}
+
+                    <div class="day-card available">
+
+                        <a
+                            class="day-link"
+                            href="{% url 'appointment:doctor-appointment-times' doctor.pk day.date|date:'Y-m-d' %}"
+                        >
+
+                            <div class="date">
+                                {{ day.date|date:"M d, Y" }}
+                            </div>
+
+                            <div class="status">
+                                View Available Times →
+                            </div>
+
+                        </a>
+
+                    </div>
+
+                {% else %}
+
+                    <div class="day-card unavailable">
+
+                        <div class="date">
+                            {{ day.date|date:"M d, Y" }}
+                        </div>
+
+                        <div class="status">
+                            Not Available
+                        </div>
+
+                    </div>
+
+                {% endif %}
+
+            {% empty %}
+
+                <p>
+                    No appointment days are available.
+                </p>
+
+            {% endfor %}
+
+        </div>
+
+        <a href="#" class="back-link">
+            ← Back to Doctor Profile
+        </a>
+
+    </div>
+
+</div>
+
+</body>
+
