@@ -23,6 +23,7 @@ class Doctor(models.Model):
         default=30, help_text="duration of each visit in minutes(like: 20, 30, 60)"
     )
     bio = models.TextField(blank=True)
+    avatar = models.ImageField(upload_to="doctors/avatars/", null=True, blank=True)
 
     class Meta:
         ordering = ["user__last_name", "user__first_name"]
