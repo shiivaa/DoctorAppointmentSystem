@@ -6,5 +6,14 @@ class FeedbackForm(forms.ModelForm):
         model = Feedback
         fields = ['rating', 'comment']
         widgets = {
-            'comment': forms.Textarea(attrs={'rows': 4}),
+            'rating': forms.Select(attrs={'class': 'form-select'}),
+            'comment': forms.Textarea(attrs={
+                'class': 'form-control',
+                'rows': 4,
+                'placeholder': _('Write your experience of last appointment')
+            }),
+        }
+        labels = {
+            'rating': _('Rank'),
+            'comment': _('Text of Comment'),
         }
