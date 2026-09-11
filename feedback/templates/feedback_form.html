@@ -1,36 +1,120 @@
 {% extends 'base.html' %}
 
-{% block content %}
-<div class="container my-5" style="max-width: 600px;">
-    <div class="card shadow-sm border-0 rounded-4">
-        <div class="card-body p-4">
-            <h3 class="card-title mb-4">Submit Appointment Feedback</h3>
-            
-            <p class="text-muted">
-                <strong>Doctor:</strong> Dr. {{ appointment.doctor }} | 
-                <strong>Date:</strong> {{ appointment.date }}
-            </p>
-            
-            <form method="post" novalidate>
-                {% csrf_token %}
-                
-                {% for field in form %}
-                    <div class="mb-3">
-                        <label class="form-label fw-bold">{{ field.label }}</label>
-                        {{ field }}
-                        {% if field.errors %}
-                            <div class="text-danger small mt-1">
-                                {{ field.errors.0 }}
-                            </div>
-                        {% endif %}
-                    </div>
-                {% endfor %}
-
-                <button type="submit" class="btn btn-primary w-100 py-2 rounded-pill mt-3">
-                    Submit Feedback
-                </button>
-            </form>
-        </div>
-    </div>
-</div>
+{% block title %}
+    Leave feedback | CarePoint
 {% endblock %}
+
+{% block content %}
+
+<div class="container">
+
+    <div class="card form-card">
+
+        <!-- =========================
+             Header
+        ========================= -->
+
+        <span class="eyebrow">
+            Your experience matters
+        </span>
+
+        <h1>
+            Leave feedback
+        </h1>
+
+        <p class="muted">
+            Share your experience with Dr.
+            {{ appointment.doctor.user.get_full_name }}.
+        </p>
+
+
+        <!-- =========================
+             Form Errors
+        ========================= -->
+
+        {% if form.non_field_errors %}
+
+            <div class="non-field-errors">
+                {{ form.non_field_errors }}
+            </div>
+
+        {% endif %}
+
+
+        <!-- =========================
+             Feedback Form
+        ========================= -->
+
+        <form method="post">
+
+            {% csrf_token %}
+
+
+            <!-- Rating -->
+
+            <div class="field">
+
+                <label for="id_rate">
+                    Rating
+                </label>
+
+                {{ form.rate }}
+
+                {{ form.rate.errors }}
+
+            </div>
+
+
+            <!-- Comment -->
+
+            <div class="field">
+
+                <label for="id_comment">
+                    Comment
+                </label>
+
+                {{ form.comment }}
+
+                {{ form.comment.errors }}
+
+            </div>
+
+
+            <!-- Submit -->
+
+            <button
+                class="btn btn-primary btn-block"
+                type="submit"
+            >
+                Submit feedback
+            </button>
+
+        </form>
+
+
+        <!-- =========================
+             Back to Appointments
+        ========================= -->
+
+        <div
+            style="
+                margin-top: 14px;
+                text-align: center;
+            "
+        >
+
+            <a
+                class="muted"
+                href="{% url 'appointment:my-appointments' %}"
+            >
+                Back to appointments
+            </a>
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}
+

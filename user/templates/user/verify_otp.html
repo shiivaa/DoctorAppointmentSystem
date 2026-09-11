@@ -1,30 +1,122 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Verify OTP</title>
-</head>
-<body>
 
-    <h1>Verify OTP</h1>
+{% extends 'base.html' %}
 
-    <p>Phone: {{ phone }}</p>
+{% block title %}
+    Verify code | CarePoint
+{% endblock %}
 
-    <p>Your OTP code is: {{ code }}</p>
+{% block content %}
 
-    <form method="POST" action="{% url 'verify_otp' %}">
-        {% csrf_token %}
+<div class="container">
 
-        {{ form.code.label_tag }}
-        {{ form.code }}
-        {{ form.code.errors }}
+    <div class="card form-card">
 
-        <br><br>
+        <!-- =========================
+             Header
+        ========================= -->
 
-        {{ form.non_field_errors }}
+        <span class="eyebrow">
+            Phone verification
+        </span>
 
-        <button type="submit">Verify</button>
-    </form>
+        <h1>
+            Enter your code
+        </h1>
 
-</body>
-</html>
+        <p class="muted">
+            We sent a verification code to
+            <strong>{{ phone }}</strong>.
+        </p>
+
+
+        <!-- =========================
+             Demo Code
+        ========================= -->
+
+        <div class="alert alert-warning">
+
+            Demo code:
+            <strong>{{ code }}</strong>
+
+        </div>
+
+
+        <!-- =========================
+             Verification Form
+        ========================= -->
+
+        <form method="post">
+
+            {% csrf_token %}
+
+
+            <!-- =========================
+                 Form Errors
+            ========================= -->
+
+            {% if form.non_field_errors %}
+
+                <div class="non-field-errors">
+                    {{ form.non_field_errors }}
+                </div>
+
+            {% endif %}
+
+
+            <!-- =========================
+                 Verification Code
+            ========================= -->
+
+            <div class="field">
+
+                <label for="id_code">
+                    6-digit code
+                </label>
+
+                {{ form.code }}
+
+                {{ form.code.errors }}
+
+            </div>
+
+
+            <!-- =========================
+                 Submit
+            ========================= -->
+
+            <button
+                class="btn btn-primary btn-block"
+                type="submit"
+            >
+                Verify and continue
+            </button>
+
+        </form>
+
+
+        <!-- =========================
+             Change Phone Number
+        ========================= -->
+
+        <div
+            style="
+                margin-top: 15px;
+                text-align: center;
+            "
+        >
+
+            <a
+                class="muted"
+                href="{% url 'send_otp' %}"
+            >
+                Use a different phone number
+            </a>
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}
+

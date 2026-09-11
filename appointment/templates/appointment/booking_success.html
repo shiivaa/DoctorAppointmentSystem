@@ -1,228 +1,139 @@
 
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+{% extends 'base.html' %}
 
-    <title>Appointment Confirmed</title>
+{% block title %}
+    Booking confirmed | CarePoint
+{% endblock %}
 
-    <style>
-        * {
-            box-sizing: border-box;
-        }
+{% block content %}
 
-        body {
-            margin: 0;
-            min-height: 100vh;
-            font-family: Arial, sans-serif;
-            background: #f5f7fb;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: #1f2937;
-        }
+<div class="container">
 
-        .success-page {
-            width: 100%;
-            max-width: 650px;
-            padding: 20px;
-        }
+    <div
+        class="card form-card"
+        style="text-align: center"
+    >
 
-        .success-card {
-            background: white;
-            border-radius: 20px;
-            padding: 40px;
-            text-align: center;
-            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.08);
-        }
+        <!-- =========================
+             Confirmation Icon
+        ========================= -->
 
-        .success-icon {
-            width: 70px;
-            height: 70px;
-            margin: 0 auto 20px;
-            border-radius: 50%;
-            background: #dcfce7;
-            color: #16a34a;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 36px;
-            font-weight: bold;
-        }
-
-        h1 {
-            margin: 0 0 10px;
-            font-size: 28px;
-        }
-
-        .message {
-            color: #6b7280;
-            margin-bottom: 30px;
-        }
-
-        .appointment-summary {
-            border: 1px solid #e5e7eb;
-            border-radius: 14px;
-            padding: 22px;
-            text-align: left;
-            margin-bottom: 30px;
-            background: #fafafa;
-        }
-
-        .appointment-summary h2 {
-            margin-top: 0;
-            margin-bottom: 20px;
-            font-size: 19px;
-        }
-
-        .info-row {
-            display: flex;
-            justify-content: space-between;
-            gap: 20px;
-            padding: 12px 0;
-            border-bottom: 1px solid #e5e7eb;
-        }
-
-        .info-row:last-child {
-            border-bottom: none;
-        }
-
-        .label {
-            color: #6b7280;
-        }
-
-        .value {
-            font-weight: bold;
-            text-align: right;
-        }
-
-        .status {
-            color: #16a34a;
-        }
-
-        .button {
-            display: inline-block;
-            padding: 13px 24px;
-            border-radius: 9px;
-            background: #2563eb;
-            color: white;
-            text-decoration: none;
-            font-weight: bold;
-        }
-
-        .button:hover {
-            background: #1d4ed8;
-        }
-
-        @media (max-width: 600px) {
-            .success-card {
-                padding: 25px 20px;
-            }
-
-            .info-row {
-                flex-direction: column;
-                gap: 5px;
-            }
-
-            .value {
-                text-align: left;
-            }
-
-            .button {
-                width: 100%;
-            }
-        }
-    </style>
-</head>
-
-<body>
-
-<div class="success-page">
-
-    <div class="success-card">
-
-        <div class="success-icon">
+        <div style="font-size: 3rem">
             ✓
         </div>
 
-        <h1>Appointment Confirmed</h1>
 
-        <p class="message">
-            Your appointment has been successfully booked.
+        <!-- =========================
+             Header
+        ========================= -->
+
+        <span class="eyebrow">
+            Confirmed
+        </span>
+
+        <h1>
+            Appointment booked successfully
+        </h1>
+
+        <p class="muted">
+            Your payment has been processed and your appointment is confirmed.
         </p>
 
 
-        <div class="appointment-summary">
+        <!-- =========================
+             Appointment Details
+        ========================= -->
 
-            <h2>Appointment Details</h2>
+        <div
+            class="list"
+            style="
+                text-align: left;
+                margin: 22px 0;
+            "
+        >
 
-            <div class="info-row">
+            <!-- Doctor -->
 
-                <span class="label">
+            <div class="list-item">
+
+                <strong>
                     Doctor
-                </span>
+                </strong>
 
-                <span class="value">
-                    Dr. {{ appointment.doctor.first_name }}
-                    {{ appointment.doctor.last_name }}
-                </span>
-
-            </div>
-
-
-            <div class="info-row">
-
-                <span class="label">
-                    Date
-                </span>
-
-                <span class="value">
-                    {{ appointment.start_time|date:"F d, Y" }}
-                </span>
+                <div class="muted">
+                    Dr.
+                    {{ appointment.doctor.user.get_full_name }}
+                </div>
 
             </div>
 
 
-            <div class="info-row">
+            <!-- Date & Time -->
 
-                <span class="label">
-                    Time
-                </span>
+            <div class="list-item">
 
-                <span class="value">
-                    {{ appointment.start_time|date:"H:i" }}
-                    -
-                    {{ appointment.end_time|date:"H:i" }}
-                </span>
+                <strong>
+                    Date & time
+                </strong>
+
+                <div class="muted">
+                    {{ appointment.start_time|date:'l, F d, Y · H:i' }}
+                    –
+                    {{ appointment.end_time|time:'H:i' }}
+                </div>
 
             </div>
 
 
-            <div class="info-row">
+            <!-- Status -->
 
-                <span class="label">
-                    Booking Status
-                </span>
+            <div class="list-item">
 
-                <span class="value status">
-                    Confirmed
-                </span>
+                <strong>
+                    Status
+                </strong>
+
+                <div>
+
+                    <span class="status success">
+                        Confirmed
+                    </span>
+
+                </div>
 
             </div>
 
         </div>
 
 
-        <a
-            class="button"
-            href="{% url 'appointment:my-appointments' %}"
+        <!-- =========================
+             Actions
+        ========================= -->
+
+        <div
+            class="hero-actions"
+            style="justify-content: center"
         >
-            View My Appointments
-        </a>
+
+            <a
+                class="btn btn-primary"
+                href="{% url 'appointment:my-appointments' %}"
+            >
+                My appointments
+            </a>
+
+            <a
+                class="btn btn-secondary"
+                href="{% url 'home' %}"
+            >
+                Back home
+            </a>
+
+        </div>
 
     </div>
 
 </div>
 
-</body>
+{% endblock %}
 

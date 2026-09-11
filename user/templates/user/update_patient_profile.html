@@ -1,76 +1,215 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Update Patient Profile</title>
-</head>
-<body>
 
-    <h1>Update Patient Profile</h1>
+{% extends 'base.html' %}
 
-    <form method="POST" action="{% url 'update_patient_profile' %}">
-        {% csrf_token %}
+{% block title %}
+    Edit profile | CarePoint
+{% endblock %}
 
-        {{ form.first_name.label_tag }}
-        {{ form.first_name }}
-        {{ form.first_name.errors }}
+{% block content %}
 
-        <br><br>
+<div class="container">
 
-        {{ form.last_name.label_tag }}
-        {{ form.last_name }}
-        {{ form.last_name.errors }}
+    <div
+        class="card form-card"
+        style="max-width: 850px"
+    >
 
-        <br><br>
+        <!-- =========================
+             Header
+        ========================= -->
 
-        {{ form.email.label_tag }}
-        {{ form.email }}
-        {{ form.email.errors }}
+        <span class="eyebrow">
+            Account settings
+        </span>
 
-        <br><br>
+        <h1>
+            Update your profile
+        </h1>
 
-        {{ form.gender.label_tag }}
-        {{ form.gender }}
-        {{ form.gender.errors }}
 
-        <br><br>
+        <!-- =========================
+             Form
+        ========================= -->
 
-        {{ form.national_code.label_tag }}
-        {{ form.national_code }}
-        {{ form.national_code.errors }}
+        {% if form.non_field_errors %}
 
-        <br><br>
+            <div class="non-field-errors">
+                {{ form.non_field_errors }}
+            </div>
 
-        {{ form.birth_date.label_tag }}
-        {{ form.birth_date }}
-        {{ form.birth_date.errors }}
+        {% endif %}
 
-        <br><br>
 
-        {{ form.insurance_number.label_tag }}
-        {{ form.insurance_number }}
-        {{ form.insurance_number.errors }}
+        <form method="post">
 
-        <br><br>
+            {% csrf_token %}
 
-        {{ form.address.label_tag }}
-        {{ form.address }}
-        {{ form.address.errors }}
 
-        <br><br>
+            <!-- =========================
+                 User Information
+            ========================= -->
 
-        {{ form.non_field_errors }}
+            <div class="form-grid">
 
-        <button type="submit">
-            Save
-        </button>
-    </form>
 
-    <br>
+                <!-- First Name -->
 
-    <a href="{% url 'patient_profile' %}">
-        Back to Profile
-    </a>
+                <div class="field">
 
-</body>
-</html>
+                    <label>
+                        First name
+                    </label>
+
+                    {{ form.first_name }}
+
+                    {{ form.first_name.errors }}
+
+                </div>
+
+
+                <!-- Last Name -->
+
+                <div class="field">
+
+                    <label>
+                        Last name
+                    </label>
+
+                    {{ form.last_name }}
+
+                    {{ form.last_name.errors }}
+
+                </div>
+
+
+                <!-- Email -->
+
+                <div class="field">
+
+                    <label>
+                        Email
+                    </label>
+
+                    {{ form.email }}
+
+                    {{ form.email.errors }}
+
+                </div>
+
+
+                <!-- Gender -->
+
+                <div class="field">
+
+                    <label>
+                        Gender
+                    </label>
+
+                    {{ form.gender }}
+
+                    {{ form.gender.errors }}
+
+                </div>
+
+
+                <!-- National Code -->
+
+                <div class="field">
+
+                    <label>
+                        National code
+                    </label>
+
+                    {{ form.national_code }}
+
+                    {{ form.national_code.errors }}
+
+                </div>
+
+
+                <!-- Birth Date -->
+
+                <div class="field">
+
+                    <label>
+                        Birth date
+                    </label>
+
+                    {{ form.birth_date }}
+
+                    {{ form.birth_date.errors }}
+
+                </div>
+
+
+                <!-- Insurance Number -->
+
+                <div class="field">
+
+                    <label>
+                        Insurance number
+                    </label>
+
+                    {{ form.insurance_number }}
+
+                    {{ form.insurance_number.errors }}
+
+                </div>
+
+
+                <!-- Address -->
+
+                <div
+                    class="field"
+                    style="grid-column: 1 / -1"
+                >
+
+                    <label>
+                        Address
+                    </label>
+
+                    {{ form.address }}
+
+                    {{ form.address.errors }}
+
+                </div>
+
+            </div>
+
+
+            <!-- =========================
+                 Actions
+            ========================= -->
+
+            <div
+                style="
+                    display: flex;
+                    gap: 10px;
+                "
+            >
+
+                <button
+                    class="btn btn-primary"
+                    type="submit"
+                >
+                    Save changes
+                </button>
+
+
+                <a
+                    class="btn btn-secondary"
+                    href="{% url 'patient_profile' %}"
+                >
+                    Cancel
+                </a>
+
+            </div>
+
+        </form>
+
+    </div>
+
+</div>
+
+{% endblock %}
+

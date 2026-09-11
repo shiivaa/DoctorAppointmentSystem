@@ -1,26 +1,151 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Wallet</title>
-</head>
-<body>
 
-    <h1>My Wallet</h1>
+{% extends 'base.html' %}
 
-    <p>Balance: {{ wallet.balance }}</p>
+{% block title %}
+    Wallet | CarePoint
+{% endblock %}
 
-    <p>Created At: {{ wallet.created_at }}</p>
+{% block content %}
 
-    <a href="{% url 'transactions' %}">
-        Transactions
-    </a>
+<div class="container">
 
-    <br><br>
+    <!-- =========================
+         Page Header
+    ========================= -->
 
-    <a href="{% url 'home' %}">
-        Back to Home
-    </a>
+    <div class="page-header">
 
-</body>
-</html>
+        <h1>
+            My wallet
+        </h1>
+
+        <p>
+            Use your wallet balance to pay for appointments.
+        </p>
+
+    </div>
+
+
+    <!-- =========================
+         Wallet Content
+    ========================= -->
+
+    <div class="grid-2">
+
+
+        <!-- =========================
+             Current Balance
+        ========================= -->
+
+        <section class="card profile-card">
+
+            <div class="muted">
+                Current balance
+            </div>
+
+            <div class="money">
+                {{ wallet.balance }}
+            </div>
+
+            <p class="muted">
+                Available for appointment payments.
+            </p>
+
+
+            <!-- =========================
+                 Top Up Form
+            ========================= -->
+
+            <form
+                method="post"
+                action="#"
+            >
+
+                {% csrf_token %}
+
+                <div class="field">
+
+                    <label>
+                        Top-up amount
+                    </label>
+
+                    <input
+                        type="number"
+                        min="1"
+                        step="1"
+                        name="amount"
+                        placeholder="Enter amount"
+                    >
+
+                </div>
+
+                <button
+                    class="btn btn-primary btn-block"
+                    type="submit"
+                >
+                    Add money
+                </button>
+
+            </form>
+
+        </section>
+
+
+        <!-- =========================
+             Wallet Shortcuts
+        ========================= -->
+
+        <section class="card profile-card">
+
+            <h2 style="margin-top: 0">
+                Wallet shortcuts
+            </h2>
+
+            <div class="list">
+
+
+                <!-- Transaction History -->
+
+                <a
+                    class="list-item"
+                    href="{% url 'wallet_transactions' %}"
+                >
+
+                    <strong>
+                        Transaction history
+                    </strong>
+
+                    <div class="muted">
+                        Review wallet credits and appointment payments.
+                    </div>
+
+                </a>
+
+
+                <!-- My Appointments -->
+
+                <a
+                    class="list-item"
+                    href="{% url 'appointment:my-appointments' %}"
+                >
+
+                    <strong>
+                        My appointments
+                    </strong>
+
+                    <div class="muted">
+                        See upcoming and completed visits.
+                    </div>
+
+                </a>
+
+            </div>
+
+        </section>
+
+    </div>
+
+</div>
+
+{% endblock %}
+
