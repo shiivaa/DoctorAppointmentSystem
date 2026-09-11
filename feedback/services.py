@@ -5,7 +5,6 @@ from django.core.exceptions import PermissionDenied
 from .models import Feedback
 from user.models import Patient
 from appointment.models import Appointment
-from doctor.models import TimeSlot
 
 
 #this function verified the condition for writing a feedback
@@ -16,7 +15,7 @@ def can_patient_submit_feedback(patient: Patient, appointment: Appointment):
         raise PermissionDenied("You are not allowed to leave feedback for this appointment.")
 
     #appointment time is passed
-    if appointment.timeslot.start_time >= timezone.now():
+    if appointment.start_time >= timezone.now():
         raise PermissionDenied("You can only leave feedback for past appointments.")
     #the first time feedback is registered for this appointment
     if hasattr(appointment, 'feedback'):
