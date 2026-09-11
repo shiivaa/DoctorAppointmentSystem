@@ -1,0 +1,62 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container my-5">
+    <!-- Header & Average Rating -->
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2>Patient Reviews for Dr. {{ doctor }}</h2>
+        <span class="badge bg-warning text-dark fs-5">
+            ★ {{ average_rating|default:"No Rating" }} / 5
+        </span>
+    </div>
+
+    <!-- Feedbacks List -->
+    <div class="row">
+        {% for fb in feedbacks %}
+            <div class="col-12 mb-3">
+                <div class="card border-0 shadow-sm rounded-3">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <h6 class="card-subtitle mb-0 text-muted">
+                                {{ fb.patient.user.get_full_name|default:fb.patient.user.username }}
+                            </h6>
+                            <span class="text-warning fw-bold">★ {{ fb.rating }}</span>
+                        </div>
+                        <p class="card-text mt-3">{{ fb.comment }}</p>
+                        <small class="text-muted">{{ fb.created_at|date:"M d, Y" }}</small>
+                    </div>
+                </div>
+            </div>
+        {% empty %}
+            <div class="col-12">
+                <div class="alert alert-light text-center border">
+                    No reviews have been submitted or approved for this doctor yet.
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+
+    <!-- Pagination Controls -->
+    {% if is_paginated %}
+    <nav class="mt-4" aria-label="Feedback navigation">
+        <ul class="pagination justify-content-center">
+            {% if page_obj.has_previous %}
+                <li class="page-item">
+                    <a class="page-link" href="?page={{ page_obj.previous_page_number }}">Previous</a>
+                </li>
+            {% endif %}
+
+            <li class="page-item disabled">
+                <span class="page-link">{{ page_obj.number }} of {{ page_obj.paginator.num_pages }}</span>
+            </li>
+
+            {% if page_obj.has_next %}
+                <li class="page-item">
+                    <a class="page-link" href="?page={{ page_obj.next_page_number }}">Next</a>
+                </li>
+            {% endif %}
+        </ul>
+    </nav>
+    {% endif %}
+</div>
+{% endblock %}
