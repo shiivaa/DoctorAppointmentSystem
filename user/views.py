@@ -1,8 +1,10 @@
+from decimal import Decimal
+
 from django.shortcuts import render, redirect
 from django.utils import timezone
 from django.contrib.auth import get_user_model, login, logout
 from datetime import timedelta
-from .models import OTP, Patient, Wallet
+from .models import OTP, Patient, Wallet, Transaction
 from .forms import SendOTPForm, VerifyOTPForm, RegistrationForm, PatientProfileForm
 from django.db.models import Count, Avg
 from doctor.models import Doctor
@@ -273,6 +275,22 @@ def wallet(request):
     wallet, created = Wallet.objects.get_or_create(
         patient=patient
     )
+
+    if request.method == "POST":
+        amount = int(request.POST["amount"])
+
+        if amount:
+            wallet.balance += Decimal(amount)
+            wallet.save()
+
+            Transaction.objects.create(
+                wallet=wallet,
+                amount=amount,
+                type="deposit",
+                description="Wallet Charge"
+            )
+
+        return redirect("wallet")
 
     return render(request, "user/wallet.html",{
         "wallet": wallet
