@@ -2,6 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <script src="https://cdn.tailwindcss.com"></script>
     <title>Title</title>
 </head>
 <body>
@@ -10,8 +11,8 @@
     <h1 class="text-3xl font-bold text-sky-900 mb-8">Find Your Doctor</h1>
 
     <!-- Search & Filter Bar -->
-    <form method="GET" action="{% url 'doctors:list' %}" class="bg-white p-6 rounded-xl shadow-sm border border-slate-200 mb-8 flex flex-wrap gap-4">
-        <!-- URL NOTE: Form action points to doctors:list -->
+    <form method="GET" action="{% url 'doctor:list' %}" class="bg-white p-6 rounded-xl shadow-sm border border-slate-200 mb-8 flex flex-wrap gap-4">
+        <!-- URL NOTE: Form action points to doctor:list -->
         <input type="text" name="q" value="{{ q }}" placeholder="Search by name or specialty..." class="flex-grow p-2 border border-slate-300 rounded-lg">
         <button type="submit" class="bg-sky-500 hover:bg-sky-600 text-white px-6 py-2 rounded-lg font-medium transition">Search</button>
     </form>
@@ -29,7 +30,7 @@
                 </div>
 
                 <!-- URL MARKER: Points to detail page -->
-                <a href="{% url 'doctors:detail' doctor.pk %}"
+                <a href="{% url 'doctor:detail' doctor.pk %}"
                    class="block text-center w-full bg-sky-50 text-sky-600 py-2 rounded-lg font-semibold hover:bg-sky-100 transition">
                     View Profile
                 </a>

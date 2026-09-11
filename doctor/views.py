@@ -27,7 +27,7 @@ def doctor_list(request):
         )
 
     if specialty_slug:
-        doctors = doctors.filter(specialty_slug=specialty_slug)
+        doctors = doctors.filter(specialty__slug=specialty_slug)
 
     if min_rating and min_rating.isdigit():
         doctors = doctors.filter(avg_rating__gte=int(min_rating))
@@ -54,7 +54,7 @@ def doctor_list(request):
         "selected_sort": sort_by,
     }
 
-    return render(request, "doctors/doctor_list.html", context)
+    return render(request, "doctor/doctor_list.html", context)
 
 
 @login_required
@@ -67,5 +67,5 @@ def doctor_detail(request, pk):
         ),
         pk=pk,
     )
-    return render(request, "doctors/doctor_detail.html", {"doctor": doctor})
+    return render(request, "doctor/doctor_detail.html", {"doctor": doctor})
 
