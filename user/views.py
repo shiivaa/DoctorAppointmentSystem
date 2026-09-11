@@ -4,6 +4,8 @@ from django.contrib.auth import get_user_model, login, logout
 from datetime import timedelta
 from .models import OTP, Patient, Wallet
 from .forms import SendOTPForm, VerifyOTPForm, RegistrationForm, PatientProfileForm
+from django.db.models import Count, Avg
+from doctor.models import Doctor
 
 import random
 
@@ -299,4 +301,11 @@ def transactions(request):
     )
 
 def home(request):
-    return render(request, "user/home.html")
+    doctors = (
+        Doctor.objects.select_related("user", "specialty")
+        .annotate(
+            avg_rating=Avg("received_feedbacks__rate"),
+            feedbacks_count=Count("received_feedbacks"),
+        )
+    )
+    return render(request, "user/home.html", {'doctors': doctors})
