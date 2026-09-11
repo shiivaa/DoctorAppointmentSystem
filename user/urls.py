@@ -10,5 +10,5 @@ urlpatterns = [
     path("profile/update/", views.update_patient_profile, name="update_patient_profile"),
     path("wallet/", views.wallet, name="wallet"),
     path("wallet/transactions/", views.transactions, name="wallet_transactions"),
-    path("home/", views.home, name="home"),
+
 ]
