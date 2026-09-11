@@ -1,45 +1,123 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Transactions</title>
-</head>
-<body>
 
-    <h1>Transactions</h1>
+{% extends 'base.html' %}
 
-    {% if transactions %}
+{% block title %}
+    Transactions | CarePoint
+{% endblock %}
 
-        {% for transaction in transactions %}
+{% block content %}
 
-            <div>
-                <p>ID: {{ transaction.id }}</p>
-                <p>Type: {{ transaction.type }}</p>
-                <p>Amount: {{ transaction.amount }}</p>
-                <p>Description: {{ transaction.description }}</p>
-                <p>Date: {{ transaction.date }}</p>
-                <p>Appointment ID: {{ transaction.appointment_id }}</p>
+<div class="container">
+
+    <!-- =========================
+         Page Header
+    ========================= -->
+
+    <div class="page-header">
+
+        <h1>
+            Transaction history
+        </h1>
+
+        <p>
+            Every wallet movement in one place.
+        </p>
+
+    </div>
+
+
+    <!-- =========================
+         Transaction List
+    ========================= -->
+
+    <div class="card" style="padding: 8px">
+
+        {% for tx in transactions %}
+
+            <div
+                class="appointment-row"
+                style="
+                    border: 0;
+                    border-radius: 12px;
+                    border-bottom: 1px solid var(--line);
+                "
+            >
+
+                <!-- =========================
+                     Transaction Information
+                ========================= -->
+
+                <div>
+
+                    <strong>
+                        {{ tx.description|default:'Wallet transaction' }}
+                    </strong>
+
+                    <div class="muted">
+                        {{ tx.created_at|date:'M d, Y · H:i' }}
+                    </div>
+
+                </div>
+
+
+                <!-- =========================
+                     Amount & Type
+                ========================= -->
+
+                <div style="text-align: right">
+
+                    <strong>
+                        {{ tx.amount }}
+                    </strong>
+
+                    <div
+                        class="
+                            status
+                            {% if tx.type == 'payment' %}
+                                danger
+                            {% else %}
+                                success
+                            {% endif %}
+                        "
+                    >
+                        {{ tx.type|title }}
+                    </div>
+
+                </div>
+
             </div>
 
-            <hr>
+        {% empty %}
+
+            <!-- =========================
+                 Empty State
+            ========================= -->
+
+            <div class="empty">
+                No wallet transactions yet.
+            </div>
 
         {% endfor %}
 
-    {% else %}
+    </div>
 
-        <p>No transactions found.</p>
 
-    {% endif %}
+    <!-- =========================
+         Back to Wallet
+    ========================= -->
 
-    <a href="{% url 'wallet' %}">
-        Back to Wallet
-    </a>
+    <div style="margin-top: 18px">
 
-    <br><br>
+        <a
+            class="btn btn-secondary"
+            href="{% url 'wallet' %}"
+        >
+            Back to wallet
+        </a>
 
-    <a href="{% url 'home' %}">
-        Back to Home
-    </a>
+    </div>
 
-</body>
-</html>
+</div>
+
+{% endblock %}
+

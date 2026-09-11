@@ -1,53 +1,267 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <script src="https://cdn.tailwindcss.com"></script>
-    <title>Title</title>
-</head>
-<body>
-<!-- doctor_detail.html -->
-<div class="max-w-3xl mx-auto px-4 py-10">
-    <div class="bg-white rounded-2xl shadow-xl border border-slate-100 p-8">
-        <!-- Doctor Header Info -->
-        <div class="flex items-center gap-6 mb-8">
-            <!-- Doctor Avatar (With Image Fallback) -->
-            <div class="w-24 h-24 rounded-full overflow-hidden flex-shrink-0 bg-sky-100 flex items-center justify-center border-2 border-sky-200">
-                {% if doctor.avatar %}
-                    <img src="{{ doctor.avatar.url }}" alt="{{ doctor.user.get_full_name }}" class="w-full h-full object-cover">
-                {% else %}
-                    <span class="text-sky-500 text-3xl font-bold">{{ doctor.user.first_name.0 }}</span>
-                {% endif %}
-            </div>
 
-            <div>
-                <h1 class="text-3xl font-bold text-sky-900">{{ doctor.user.get_full_name }}</h1>
-                <p class="text-lg text-sky-600">{{ doctor.specialty.title }}</p>
-            </div>
-        </div>
+{% extends 'base.html' %}
 
-        <p class="text-slate-600 mb-8 leading-relaxed">
-            {{ doctor.bio|default:"No bio available." }}
+{% block title %}
+    Dr. {{ doctor.user.get_full_name }} | CarePoint
+{% endblock %}
+
+{% block content %}
+
+<div class="container">
+
+    <!-- =========================
+         Page Header
+    ========================= -->
+
+    <div class="page-header">
+
+        <p>
+
+            <a
+                class="muted"
+                href="{% url 'doctor:list' %}"
+            >
+                ← Back to doctors
+            </a>
+
         </p>
 
-
-        <!-- Action Buttons Section -->
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 border-t pt-8">
-
-            <!-- URL MARKER 1: Appointments App -->
-            <a href="{% url 'appointments:doctor_shifts' doctor.pk %}"
-               class="flex justify-center items-center gap-2 bg-sky-500 hover:bg-sky-600 text-white py-3 rounded-xl font-bold transition">
-                <span>📅</span> Book Appointment
-            </a>
-
-            <!-- URL MARKER 2: Feedback App -->
-            <a href="{% url 'feedback:doctor_reviews' doctor.pk %}"
-               class="flex justify-center items-center gap-2 bg-white border-2 border-sky-500 text-sky-600 hover:bg-sky-50 py-3 rounded-xl font-bold transition">
-                <span>💬</span> Patient Reviews
-            </a>
-        </div>
     </div>
+
+
+    <!-- =========================
+         Doctor Details
+    ========================= -->
+
+    <div class="detail-grid">
+
+
+        <!-- =========================
+             Doctor Profile
+        ========================= -->
+
+        <section class="card profile-card">
+
+            <div class="profile-head">
+
+
+                <!-- Doctor Photo -->
+
+                {% if doctor.photo %}
+
+                    <img
+                        class="large-avatar"
+                        src="{{ doctor.photo.url }}"
+                        alt="Dr. {{ doctor.user.get_full_name }}"
+                    >
+
+                {% else %}
+
+                    <div class="large-avatar">
+                        DR
+                    </div>
+
+                {% endif %}
+
+
+                <!-- Doctor Basic Information -->
+
+                <div>
+
+                    <h1 style="margin: 0">
+                        Dr.
+                        {{ doctor.user.get_full_name|default:doctor.user.username }}
+                    </h1>
+
+                    <div class="muted">
+                        {{ doctor.specialty.title }}
+                    </div>
+
+
+                    <!-- Rating -->
+
+                    <div
+                        class="rating"
+                        style="margin-top: 6px"
+                    >
+
+                        <span class="stars">
+                            ★
+                        </span>
+
+                        {{ doctor.avg_rating|default:'0'|floatformat:1 }}
+
+                        <span class="muted">
+                            ({{ doctor.feedbacks_count|default:0 }} reviews)
+                        </span>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- =========================
+                 Doctor Stats
+            ========================= -->
+
+            <div class="stat-row">
+
+
+                <!-- Visit Fee -->
+
+                <div class="stat">
+
+                    <span class="muted">
+                        Visit fee
+                    </span>
+
+                    <strong>
+                        {{ doctor.visit_fee }}
+                    </strong>
+
+                </div>
+
+
+                <!-- Visit Duration -->
+
+                <div class="stat">
+
+                    <span class="muted">
+                        Duration
+                    </span>
+
+                    <strong>
+                        {{ doctor.visit_duration }} min
+                    </strong>
+
+                </div>
+
+
+                <!-- Phone -->
+
+                <div class="stat">
+
+                    <span class="muted">
+                        Phone
+                    </span>
+
+                    <strong>
+                        {{ doctor.user.phone }}
+                    </strong>
+
+                </div>
+
+            </div>
+
+
+            <!-- =========================
+                 Doctor Biography
+            ========================= -->
+
+            <div style="margin-top: 22px">
+
+                <h3>
+                    About the doctor
+                </h3>
+
+                <p class="muted">
+                    {{ doctor.bio|default:'This doctor has not added a biography yet.' }}
+                </p>
+
+            </div>
+
+
+            <!-- =========================
+                 Actions
+            ========================= -->
+
+            <div class="hero-actions">
+
+                <a
+                    class="btn btn-primary"
+                    href="{% url 'appointment:doctor-appointment-days' doctor.pk %}"
+                >
+                    Book an appointment
+                </a>
+
+                <a
+                    class="btn btn-secondary"
+                    href="{% url 'show_feedbacks' doctor.pk %}"
+                >
+                    Read reviews
+                </a>
+
+            </div>
+
+        </section>
+
+
+        <!-- =========================
+             Professional Information
+        ========================= -->
+
+        <section class="card profile-card">
+
+            <h2 style="margin-top: 0">
+                Professional information
+            </h2>
+
+            <div class="list">
+
+
+                <!-- Address -->
+
+                <div class="list-item">
+
+                    <strong>
+                        Address
+                    </strong>
+
+                    <div class="muted">
+                        {{ doctor.address|default:'Not provided' }}
+                    </div>
+
+                </div>
+
+
+                <!-- Medical System Number -->
+
+                <div class="list-item">
+
+                    <strong>
+                        Medical system number
+                    </strong>
+
+                    <div class="muted">
+                        {{ doctor.medical_system_number|default:'Not provided' }}
+                    </div>
+
+                </div>
+
+
+                <!-- Availability -->
+
+                <div class="list-item">
+
+                    <strong>
+                        Availability
+                    </strong>
+
+                    <div class="muted">
+                        Choose a date to see generated appointment slots.
+                    </div>
+
+                </div>
+
+            </div>
+
+        </section>
+
+    </div>
+
 </div>
 
-</body>
-</html>
+{% endblock %}
+

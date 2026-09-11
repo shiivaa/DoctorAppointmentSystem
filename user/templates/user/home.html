@@ -1,55 +1,80 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Home</title>
-</head>
-<body>
+{% extends 'base.html' %}
 
-    <h1>Welcome to Doctor Appointment System</h1>
+{% block title %}CarePoint | Find a Doctor{% endblock %}
 
-    {% if request.user.is_authenticated %}
+{% block content %}
+<section class="hero">
+    <div class="container hero-grid">
+        <div>
+            <span class="eyebrow">Healthcare made simple</span>
+            <h1>Find the right doctor. Book with confidence.</h1>
+            <p>Search trusted doctors, check available appointment times, manage your wallet, and keep every booking in one place.</p>
+            <div class="hero-actions">
+                <a class="btn btn-primary" href="{% url 'doctor:list' %}">Find a Doctor</a>
+                {% if user.is_authenticated %}
+                    <a class="btn btn-secondary" href="{% url 'appointment:my-appointments' %}">View My Appointments</a>
+                {% else %}
+                    <a class="btn btn-secondary" href="{% url 'send_otp' %}">Sign in with Phone</a>
+                {% endif %}
+            </div>
+        </div>
 
-        <p>
-            Welcome, {{ request.user.first_name }} {{ request.user.last_name }}
-        </p>
+        <div class="hero-card">
+            <div class="metric">
+                <span>Available doctors</span>
+                <strong>{{ doctors|length }}+</strong>
+            </div>
+            <div class="metric">
+                <span>Easy booking</span>
+                <strong>24/7</strong>
+            </div>
+            <div class="metric">
+                <span>Secure wallet</span>
+                <strong>Protected</strong>
+            </div>
+        </div>
+    </div>
+</section>
 
-        <hr>
+<section class="section">
+    <div class="container">
+        <div class="section-head">
+            <div>
+                <h2>Featured doctors</h2>
+                <p>Browse doctors currently available in the platform.</p>
+            </div>
+            <a class="btn btn-secondary btn-sm" href="{% url 'doctor:list' %}">View all</a>
+        </div>
 
-        <h2>Menu</h2>
-
-        <ul>
-            <li>
-                <a href="{% url 'patient_profile' %}">
-                    Patient Profile
-                </a>
-            </li>
-
-            <li>
-                <a href="{% url 'wallet' %}">
-                    Wallet
-                </a>
-            </li>
-
-            <li>
-                <a href="{% url 'transactions' %}">
-                    Transactions
-                </a>
-            </li>
-        </ul>
-
-        <form method="POST" action="{% url 'logout' %}">
-            {% csrf_token %}
-            <button type="submit">Logout</button>
-        </form>
-
-    {% else %}
-
-        <a href="{% url 'send_otp' %}">
-            Login
-        </a>
-
-    {% endif %}
-
-</body>
-</html>
+        <div class="grid">
+            {% for doctor in doctors|slice:":6" %}
+                <article class="card doctor-card">
+                    <div class="doctor-top">
+                        {% if doctor.photo %}
+                            <img class="avatar" src="{{ doctor.photo.url }}" alt="Dr. {{ doctor.user.get_full_name }}">
+                        {% else %}
+                            <div class="avatar">DR</div>
+                        {% endif %}
+                        <div>
+                            <h3>Dr. {{ doctor.user.get_full_name|default:doctor.user.username }}</h3>
+                            <div class="muted">{{ doctor.specialty.title }}</div>
+                        </div>
+                    </div>
+                    <div class="doctor-body">
+                        <div class="rating">
+                            <span class="stars">★</span> {{ doctor.avg_rating|default:"0.0"|floatformat:1 }}
+                            <span class="muted">({{ doctor.feedbacks_count|default:0 }})</span>
+                        </div>
+                        <div class="card-footer">
+                            <strong>{{ doctor.visit_fee }} / visit</strong>
+                            <a class="btn btn-primary btn-sm" href="{% url 'doctor:detail' doctor.pk %}">View profile</a>
+                        </div>
+                    </div>
+                </article>
+            {% empty %}
+                <div class="empty" style="grid-column:1/-1">No doctors have been added yet.</div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+{% endblock %}

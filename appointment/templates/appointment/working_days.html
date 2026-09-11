@@ -1,212 +1,108 @@
 
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+{% extends 'base.html' %}
 
-    <title>Choose Appointment Day</title>
+{% block title %}
+    Choose a date | CarePoint
+{% endblock %}
 
-    <style>
-        * {
-            box-sizing: border-box;
-        }
+{% block content %}
 
-        body {
-            margin: 0;
-            font-family: Arial, sans-serif;
-            background: #f5f7fb;
-            color: #1f2937;
-        }
+<div class="container">
 
-        .page {
-            max-width: 1100px;
-            margin: 50px auto;
-            padding: 0 20px;
-        }
+    <!-- =========================
+         Page Header
+    ========================= -->
 
-        .header {
-            background: white;
-            border-radius: 16px;
-            padding: 28px;
-            margin-bottom: 25px;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.06);
-        }
+    <div class="page-header">
 
-        .header h1 {
-            margin: 0 0 8px;
-            font-size: 28px;
-        }
+        <p>
 
-        .doctor-name {
-            color: #4b5563;
-            margin: 0;
-            font-size: 16px;
-        }
+            <a
+                class="muted"
+                href="{% url 'doctor:detail' doctor.pk %}"
+            >
+                ← Back to doctor
+            </a>
 
-        .days-container {
-            background: white;
-            border-radius: 16px;
-            padding: 28px;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.06);
-        }
+        </p>
 
-        .days-container h2 {
-            margin-top: 0;
-            margin-bottom: 20px;
-            font-size: 20px;
-        }
+        <h1>
+            Choose a date
+        </h1>
 
-        .days-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
-            gap: 15px;
-        }
-
-        .day-card {
-            border: 1px solid #e5e7eb;
-            border-radius: 12px;
-            padding: 18px;
-            text-align: center;
-            background: #fafafa;
-        }
-
-        .day-card.available {
-            background: #ffffff;
-            border-color: #2563eb;
-            transition: 0.2s;
-        }
-
-        .day-card.available:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 5px 15px rgba(37, 99, 235, 0.12);
-        }
-
-        .day-link {
-            text-decoration: none;
-            color: inherit;
-            display: block;
-        }
-
-        .date {
-            font-size: 18px;
-            font-weight: bold;
-            margin-bottom: 8px;
-        }
-
-        .status {
-            font-size: 13px;
-            color: #6b7280;
-        }
-
-        .available .status {
-            color: #2563eb;
-            font-weight: bold;
-        }
-
-        .unavailable {
-            opacity: 0.55;
-        }
-
-        .back-link {
-            display: inline-block;
-            margin-top: 25px;
-            color: #4b5563;
-            text-decoration: none;
-        }
-
-        .back-link:hover {
-            text-decoration: underline;
-        }
-
-        @media (max-width: 600px) {
-            .page {
-                margin-top: 25px;
-            }
-
-            .days-grid {
-                grid-template-columns: 1fr 1fr;
-            }
-        }
-    </style>
-</head>
-
-<body>
-
-<div class="page">
-
-    <div class="header">
-
-        <h1>Choose an Appointment Day</h1>
-
-        <p class="doctor-name">
-            Doctor {{ doctor.first_name }} {{ doctor.last_name }}
+        <p>
+            Available working days for Dr.
+            {{ doctor.user.get_full_name }}
+            over the next 30 days.
         </p>
 
     </div>
 
 
-    <div class="days-container">
+    <!-- =========================
+         Available Dates
+    ========================= -->
 
-        <h2>Available Days</h2>
+    <div class="date-grid">
 
-        <div class="days-grid">
+        {% for day in days %}
 
-            {% for day in days %}
+            <div
+                class="
+                    date-card
+                    {% if not day.is_working_day %}
+                        unavailable
+                    {% endif %}
+                "
+            >
+
+                <!-- Day of Week -->
+
+                <div class="muted">
+                    {{ day.date|date:'D' }}
+                </div>
+
+
+                <!-- Date -->
+
+                <h3 style="margin: 4px 0">
+                    {{ day.date|date:'M d' }}
+                </h3>
+
+
+                <!-- =========================
+                     Working Day
+                ========================= -->
 
                 {% if day.is_working_day %}
 
-                    <div class="day-card available">
+                    <a
+                        class="btn btn-primary btn-sm"
+                        href="{% url 'appointment:doctor-appointment-times' doctor.pk day.date|date:'Y-m-d' %}"
+                    >
+                        View times
+                    </a>
 
-                        <a
-                            class="day-link"
-                            href="{% url 'appointment:doctor-appointment-times' doctor.pk day.date|date:'Y-m-d' %}"
-                        >
 
-                            <div class="date">
-                                {{ day.date|date:"M d, Y" }}
-                            </div>
-
-                            <div class="status">
-                                View Available Times →
-                            </div>
-
-                        </a>
-
-                    </div>
+                <!-- =========================
+                     Non-working Day
+                ========================= -->
 
                 {% else %}
 
-                    <div class="day-card unavailable">
-
-                        <div class="date">
-                            {{ day.date|date:"M d, Y" }}
-                        </div>
-
-                        <div class="status">
-                            Not Available
-                        </div>
-
-                    </div>
+                    <span class="status pending">
+                        Not available
+                    </span>
 
                 {% endif %}
 
-            {% empty %}
+            </div>
 
-                <p>
-                    No appointment days are available.
-                </p>
-
-            {% endfor %}
-
-        </div>
-
-        <a href="#" class="back-link">
-            ← Back to Doctor Profile
-        </a>
+        {% endfor %}
 
     </div>
 
 </div>
 
-</body>
+{% endblock %}
 

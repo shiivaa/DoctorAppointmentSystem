@@ -1,49 +1,207 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Patient Profile</title>
-</head>
-<body>
 
-    <h1>Patient Profile</h1>
+{% extends 'base.html' %}
 
-    <h2>User Information</h2>
+{% block title %}
+    My profile | CarePoint
+{% endblock %}
 
-    <p>Username: {{ user.username }}</p>
-    <p>First Name: {{ user.first_name }}</p>
-    <p>Last Name: {{ user.last_name }}</p>
-    <p>Phone: {{ user.phone }}</p>
-    <p>Gender: {{ user.gender }}</p>
-    <p>National Code: {{ user.national_code }}</p>
-    <p>Birth Date: {{ user.birth_date }}</p>
+{% block content %}
 
-    {% if patient %}
+<div class="container">
 
-        <h2>Patient Information</h2>
+    <!-- =========================
+         Page Header
+    ========================= -->
 
-        <p>Insurance Number: {{ patient.insurance_number }}</p>
-        <p>Address: {{ patient.address }}</p>
+    <div class="page-header">
 
-        <a href="{% url 'update_patient_profile' %}">
-            Update Profile
-        </a>
+        <h1>
+            My profile
+        </h1>
 
-    {% else %}
+        <p>
+            Manage your personal and patient information.
+        </p>
 
-        <p>Patient profile is not completed.</p>
+    </div>
 
-        <a href="{% url 'update_patient_profile' %}">
-            Complete Patient Profile
-        </a>
 
-    {% endif %}
+    <!-- =========================
+         Profile Content
+    ========================= -->
 
-    <br><br>
+    <div class="detail-grid">
 
-    <a href="{% url 'home' %}">
-        Back to Home
-    </a>
 
-</body>
-</html>
+        <!-- =========================
+             Personal Information
+        ========================= -->
+
+        <section class="card profile-card">
+
+            <div class="profile-head">
+
+                <div class="large-avatar">
+                    {{ user.first_name|first|default:'P' }}{{ user.last_name|first }}
+                </div>
+
+                <div>
+
+                    <h2 style="margin: 0">
+                        {{ user.get_full_name|default:user.username }}
+                    </h2>
+
+                    <div class="muted">
+                        @{{ user.username }}
+                    </div>
+
+                    <div class="muted">
+                        {{ user.phone }}
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- =========================
+                 User Stats
+            ========================= -->
+
+            <div class="stat-row">
+
+                <div class="stat">
+
+                    <span class="muted">
+                        Gender
+                    </span>
+
+                    <strong>
+                        {{ user.gender|default:'—'|title }}
+                    </strong>
+
+                </div>
+
+
+                <div class="stat">
+
+                    <span class="muted">
+                        Birth date
+                    </span>
+
+                    <strong>
+                        {{ user.birth_date|date:'M d, Y'|default:'—' }}
+                    </strong>
+
+                </div>
+
+
+                <div class="stat">
+
+                    <span class="muted">
+                        National code
+                    </span>
+
+                    <strong>
+                        {{ user.national_code|default:'—' }}
+                    </strong>
+
+                </div>
+
+            </div>
+
+
+            <!-- =========================
+                 Edit Profile Button
+            ========================= -->
+
+            <div style="margin-top: 22px">
+
+                <a
+                    class="btn btn-primary"
+                    href="{% url 'update_patient_profile' %}"
+                >
+                    Edit profile
+                </a>
+
+            </div>
+
+        </section>
+
+
+        <!-- =========================
+             Patient Information
+        ========================= -->
+
+        <section class="card profile-card">
+
+            {% if patient %}
+
+                <h2 style="margin-top: 0">
+                    Patient details
+                </h2>
+
+                <div class="list">
+
+                    <div class="list-item">
+
+                        <strong>
+                            Insurance number
+                        </strong>
+
+                        <div class="muted">
+                            {{ patient.insurance_number }}
+                        </div>
+
+                    </div>
+
+
+                    <div class="list-item">
+
+                        <strong>
+                            Address
+                        </strong>
+
+                        <div class="muted">
+                            {{ patient.address }}
+                        </div>
+
+                    </div>
+
+                </div>
+
+            {% else %}
+
+                <!-- =========================
+                     Incomplete Patient Profile
+                ========================= -->
+
+                <div class="empty">
+
+                    <h3>
+                        Patient details are incomplete
+                    </h3>
+
+                    <p class="muted">
+                        Add your patient information before booking appointments.
+                    </p>
+
+                    <a
+                        class="btn btn-primary"
+                        href="{% url 'update_patient_profile' %}"
+                    >
+                        Complete profile
+                    </a>
+
+                </div>
+
+            {% endif %}
+
+        </section>
+
+    </div>
+
+</div>
+
+{% endblock %}
+```
