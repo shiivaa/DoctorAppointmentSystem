@@ -2,10 +2,10 @@ from decimal import Decimal
 
 from django.shortcuts import render, redirect
 from django.utils import timezone
-from django.contrib.auth import get_user_model, login, logout
+from django.contrib.auth import get_user_model, login, logout, authenticate
 from datetime import timedelta
 from .models import OTP, Patient, Wallet, Transaction
-from .forms import SendOTPForm, VerifyOTPForm, RegistrationForm, PatientProfileForm
+from .forms import SendOTPForm, VerifyOTPForm, RegistrationForm, PatientProfileForm, LoginForm
 from django.db.models import Count, Avg
 from doctor.models import Doctor
 
@@ -13,6 +13,10 @@ import random
 
 
 User = get_user_model()
+
+def sign_in(request):
+    return render(request, "user/sing_in.html")
+
 def send_otp(request):
     if request.method == "GET":
         form = SendOTPForm()
@@ -111,6 +115,41 @@ def verify_otp(request):
 
     del request.session["otp_phone"]
     del request.session["otp_code"]
+
+    return redirect("home")
+
+def login_user(request):
+    if request.method == "GET":
+        form = LoginForm()
+
+        return render(request, "user/login.html", {
+            "form": form
+        })
+
+    form = LoginForm(request.POST)
+
+    if not form.is_valid():
+        return render(request, "user/login.html",{
+            "form": form
+        })
+
+    username = form.cleaned_data["username"]
+    password = form.cleaned_data["password"]
+
+    user = authenticate(
+        request,
+        username=username,
+        password=password
+    )
+
+    if user is None:
+        form.add_error(None, "Username or password is incorrect.")
+
+        return render(request, "user/login.html",{
+            "form": form,
+        })
+
+    login(request, user)
 
     return redirect("home")
 
