@@ -1,0 +1,80 @@
+{% extends "base.html" %}
+
+{% load i18n %}
+
+{% block title %}
+    Continue with Google | CarePoint
+{% endblock %}
+
+{% block content %}
+
+<div class="container">
+
+    <div class="card form-card">
+
+        <span class="eyebrow">
+            CarePoint Authentication
+        </span>
+
+        <h1>
+            Continue with Google
+        </h1>
+
+        <p class="muted">
+            You are about to sign in to CarePoint using your Google account.
+        </p>
+
+        <div
+            style="
+                margin-top: 25px;
+                padding: 16px;
+                background: #f8fafc;
+                border: 1px solid var(--line);
+                border-radius: 15px;
+            "
+        >
+            <strong>
+                Google account
+            </strong>
+
+            <p
+                class="muted"
+                style="margin: 5px 0 0;"
+            >
+                You will be redirected to Google to choose your account
+                and authorize CarePoint.
+            </p>
+        </div>
+
+        <form
+            method="post"
+            style="margin-top: 25px;"
+        >
+
+            {% csrf_token %}
+
+            <button
+                type="submit"
+                class="btn btn-primary btn-block"
+            >
+                Continue with Google
+            </button>
+
+        </form>
+
+        <div style="margin-top: 14px; text-align: center;">
+
+            <a
+                href="{% url 'sign_in' %}"
+                class="muted"
+            >
+                Cancel
+            </a>
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}
