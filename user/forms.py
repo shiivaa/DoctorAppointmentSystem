@@ -36,6 +36,10 @@ class VerifyOTPForm(forms.Form):
             )
         return code
 
+class LoginForm(forms.Form):
+    username = forms.CharField(max_length=40)
+    password = forms.CharField(widget=forms.PasswordInput)
+
 class RegistrationForm(forms.Form):
     username = forms.CharField(
         max_length=30,

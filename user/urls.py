@@ -10,5 +10,6 @@ urlpatterns = [
     path("profile/update/", views.update_patient_profile, name="update_patient_profile"),
     path("wallet/", views.wallet, name="wallet"),
     path("wallet/transactions/", views.transactions, name="wallet_transactions"),
-
+    path("login/", views.login_user, name="login_user"),
+    path("sign-in/", views.sign_in, name="sign_in"),
 ]

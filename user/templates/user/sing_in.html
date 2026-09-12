@@ -1,0 +1,47 @@
+{% extends 'base.html' %}
+
+{% block title %}
+    Sign in | CarePoint
+{% endblock %}
+
+{% block content %}
+
+<div class="container">
+
+    <div class="card form-card">
+
+        <span class="eyebrow">
+            Welcome to CarePoint
+        </span>
+
+        <h1>
+            Sign in
+        </h1>
+
+        <p class="muted">
+            Choose how you want to sign in to your account.
+        </p>
+
+        <div style="display: grid; gap: 12px; margin-top: 25px;">
+
+            <a
+                href="{% url 'send_otp' %}"
+                class="btn btn-primary btn-block"
+            >
+                Sign in with phone number
+            </a>
+
+            <a
+                href="{% url 'login_user' %}"
+                class="btn btn-secondary btn-block"
+            >
+                Sign in with username and password
+            </a>
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}

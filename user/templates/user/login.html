@@ -1,0 +1,103 @@
+{% extends 'base.html' %}
+
+{% block title %}
+    Login | CarePoint
+{% endblock %}
+
+{% block content %}
+
+<div class="container">
+
+    <div class="card form-card">
+
+        <!-- =========================
+             Header
+        ========================= -->
+
+        <span class="eyebrow">
+            Account login
+        </span>
+
+        <h1>
+            Sign in to your account
+        </h1>
+
+        <p class="muted">
+            Enter your username and password to continue.
+        </p>
+
+
+        <!-- =========================
+             Login Form
+        ========================= -->
+
+        <form method="post">
+
+            {% csrf_token %}
+
+
+            <!-- =========================
+                 Form Errors
+            ========================= -->
+
+            {% if form.non_field_errors %}
+
+                <div class="non-field-errors">
+                    {{ form.non_field_errors }}
+                </div>
+
+            {% endif %}
+
+
+            <!-- =========================
+                 Username
+            ========================= -->
+
+            <div class="field">
+
+                <label for="id_username">
+                    Username
+                </label>
+
+                {{ form.username }}
+
+                {{ form.username.errors }}
+
+            </div>
+
+
+            <!-- =========================
+                 Password
+            ========================= -->
+
+            <div class="field">
+
+                <label for="id_password">
+                    Password
+                </label>
+
+                {{ form.password }}
+
+                {{ form.password.errors }}
+
+            </div>
+
+
+            <!-- =========================
+                 Submit
+            ========================= -->
+
+            <button
+                class="btn btn-primary btn-block"
+                type="submit"
+            >
+                Sign in
+            </button>
+
+        </form>
+
+    </div>
+
+</div>
+
+{% endblock %}
