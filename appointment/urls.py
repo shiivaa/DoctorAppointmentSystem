@@ -2,6 +2,8 @@ from django.urls import path
 
 from . import views
 
+app_name = 'appointment'
+
 urlpatterns = [
     path('doctor/<int:doctor_pk>/days/',views.doctor_working_days,name='doctor-appointment-days'),
 

@@ -1,5 +1,6 @@
 {% extends 'base.html' %}
 
+<<<<<<< HEAD
 {% block content %}
 <div class="container my-5">
     <!-- Header & Average Rating -->
@@ -60,3 +61,217 @@
     {% endif %}
 </div>
 {% endblock %}
+=======
+{% block title %}
+    Reviews | CarePoint
+{% endblock %}
+
+{% block content %}
+
+<div class="container">
+
+    <!-- =========================
+         Page Header
+    ========================= -->
+
+    <div class="page-header">
+
+        <p>
+
+            <a
+                class="muted"
+                href="{% url 'doctor:detail' doctor.pk %}"
+            >
+                ← Back to doctor
+            </a>
+
+        </p>
+
+        <h1>
+            Patient reviews
+        </h1>
+
+        <p>
+            Verified feedback for Dr.
+            {{ doctor.user.get_full_name }}.
+        </p>
+
+    </div>
+
+
+    <!-- =========================
+         Summary
+    ========================= -->
+
+    <div
+        class="grid-2"
+        style="margin-bottom: 22px"
+    >
+
+        <!-- Average Rating -->
+
+        <div class="card profile-card">
+
+            <div class="muted">
+                Average rating
+            </div>
+
+            <div class="money">
+                ★ {{ average_rating|floatformat:1 }}
+            </div>
+
+        </div>
+
+
+        <!-- Specialty -->
+
+        <div class="card profile-card">
+
+            <div class="muted">
+                Specialty
+            </div>
+
+            <div
+                class="money"
+                style="font-size: 1.3rem"
+            >
+                {{ doctor.specialty.title }}
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- =========================
+         Reviews List
+    ========================= -->
+
+    <div class="list">
+
+        {% for feedback in feedbacks %}
+
+            <article class="list-item">
+
+
+                <!-- =========================
+                     Review Header
+                ========================= -->
+
+                <div
+                    style="
+                        display: flex;
+                        justify-content: space-between;
+                        gap: 15px;
+                    "
+                >
+
+                    <!-- Patient Information -->
+
+                    <div>
+
+                        <strong>
+                            {{ feedback.patient.user.get_full_name|default:feedback.patient.user.username }}
+                        </strong>
+
+                        <div class="muted">
+                            {{ feedback.created_at|date:'M d, Y' }}
+                        </div>
+
+                    </div>
+
+
+                    <!-- Rating -->
+
+                    <div class="rating">
+
+                        ★ {{ feedback.rate }}
+
+                    </div>
+
+                </div>
+
+
+                <!-- =========================
+                     Review Comment
+                ========================= -->
+
+                <p style="margin-bottom: 0">
+
+                    {{ feedback.comment }}
+
+                </p>
+
+            </article>
+
+
+        {% empty %}
+
+            <div class="empty">
+                No confirmed reviews yet.
+            </div>
+
+        {% endfor %}
+
+    </div>
+
+
+    <!-- =========================
+         Pagination
+    ========================= -->
+
+    {% if is_paginated %}
+
+        <div
+            style="
+                display: flex;
+                justify-content: center;
+                gap: 8px;
+                margin-top: 24px;
+            "
+        >
+
+            {% if page_obj.has_previous %}
+
+                <a
+                    class="btn btn-secondary btn-sm"
+                    href="?page={{ page_obj.previous_page_number }}"
+                >
+                    Previous
+                </a>
+
+            {% endif %}
+
+
+            <!-- Current Page -->
+
+            <span class="btn btn-secondary btn-sm">
+
+                Page
+                {{ page_obj.number }}
+                of
+                {{ page_obj.paginator.num_pages }}
+
+            </span>
+
+
+            {% if page_obj.has_next %}
+
+                <a
+                    class="btn btn-secondary btn-sm"
+                    href="?page={{ page_obj.next_page_number }}"
+                >
+                    Next
+                </a>
+
+            {% endif %}
+
+        </div>
+
+    {% endif %}
+
+</div>
+
+{% endblock %}
+
+>>>>>>> 3428533c14a73ea2e6dbd724c8b28378e8fe9901

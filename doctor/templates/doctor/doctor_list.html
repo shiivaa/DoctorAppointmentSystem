@@ -1,0 +1,361 @@
+
+{% extends 'base.html' %}
+
+{% block title %}
+    Doctors | CarePoint
+{% endblock %}
+
+{% block content %}
+
+<div class="container">
+
+    <!-- =========================
+         Page Header
+    ========================= -->
+
+    <div class="page-header">
+
+        <h1>
+            Find a doctor
+        </h1>
+
+        <p>
+            Search by name or specialty and compare ratings and visit fees.
+        </p>
+
+    </div>
+
+
+    <!-- =========================
+         Search & Filters
+    ========================= -->
+
+    <form
+        method="get"
+        class="toolbar"
+    >
+
+        <!-- Search -->
+
+        <input
+            class="input"
+            name="q"
+            value="{{ q }}"
+            placeholder="Search doctor or specialty"
+        >
+
+
+        <!-- Specialty -->
+
+        <select
+            class="select"
+            name="specialty"
+        >
+
+            <option value="">
+                All specialties
+            </option>
+
+            {% for specialty in specialties %}
+
+                <option
+                    value="{{ specialty.slug }}"
+                    {% if selected_specialty == specialty.slug %}
+                        selected
+                    {% endif %}
+                >
+                    {{ specialty.title }}
+                </option>
+
+            {% endfor %}
+
+        </select>
+
+
+        <!-- Minimum Rating -->
+
+        <select
+            class="select"
+            name="min_rating"
+        >
+
+            <option value="">
+                Any rating
+            </option>
+
+            <option
+                value="5"
+                {% if selected_min_rating == '5' %}
+                    selected
+                {% endif %}
+            >
+                5+ stars
+            </option>
+
+            <option
+                value="4"
+                {% if selected_min_rating == '4' %}
+                    selected
+                {% endif %}
+            >
+                4+ stars
+            </option>
+
+            <option
+                value="3"
+                {% if selected_min_rating == '3' %}
+                    selected
+                {% endif %}
+            >
+                3+ stars
+            </option>
+
+        </select>
+
+
+        <!-- Sorting -->
+
+        <select
+            class="select"
+            name="sort"
+        >
+
+            <option
+                value="-rating"
+                {% if selected_sort == '-rating' %}
+                    selected
+                {% endif %}
+            >
+                Top rated
+            </option>
+
+            <option
+                value="rating"
+                {% if selected_sort == 'rating' %}
+                    selected
+                {% endif %}
+            >
+                Lowest rated
+            </option>
+
+            <option
+                value="fee"
+                {% if selected_sort == 'fee' %}
+                    selected
+                {% endif %}
+            >
+                Lowest fee
+            </option>
+
+            <option
+                value="-fee"
+                {% if selected_sort == '-fee' %}
+                    selected
+                {% endif %}
+            >
+                Highest fee
+            </option>
+
+            <option
+                value="name"
+                {% if selected_sort == 'name' %}
+                    selected
+                {% endif %}
+            >
+                Name
+            </option>
+
+        </select>
+
+
+        <!-- Apply -->
+
+        <button
+            class="btn btn-primary"
+            type="submit"
+        >
+            Apply
+        </button>
+
+    </form>
+
+
+    <!-- =========================
+         Doctors
+    ========================= -->
+
+    <div class="grid">
+
+        {% for doctor in page_obj %}
+
+            <article class="card doctor-card">
+
+                <!-- =========================
+                     Doctor Header
+                ========================= -->
+
+                <div class="doctor-top">
+
+                    {% if doctor.photo %}
+
+                        <img
+                            class="avatar"
+                            src="{{ doctor.photo.url }}"
+                            alt="Dr. {{ doctor.user.get_full_name }}"
+                        >
+
+                    {% else %}
+
+                        <div class="avatar">
+                            DR
+                        </div>
+
+                    {% endif %}
+
+
+                    <div>
+
+                        <h3>
+                            Dr.
+                            {{ doctor.user.get_full_name|default:doctor.user.username }}
+                        </h3>
+
+                        <div class="muted">
+                            {{ doctor.specialty.title }}
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <!-- =========================
+                     Doctor Body
+                ========================= -->
+
+                <div class="doctor-body">
+
+
+                    <!-- Rating -->
+
+                    <div class="rating">
+
+                        <span class="stars">
+                            ★
+                        </span>
+
+                        {{ doctor.avg_rating|default:'0'|floatformat:1 }}
+
+                        <span class="muted">
+                            · {{ doctor.feedbacks_count|default:0 }} reviews
+                        </span>
+
+                    </div>
+
+
+                    <!-- Bio -->
+
+                    <p class="muted">
+
+                        {{ doctor.bio|default:'Professional healthcare provider ready to help you.'|truncatechars:110 }}
+
+                    </p>
+
+
+                    <!-- Footer -->
+
+                    <div class="card-footer">
+
+                        <strong>
+                            {{ doctor.visit_fee }}
+                        </strong>
+
+                        <a
+                            class="btn btn-primary btn-sm"
+                            href="{% url 'doctor:detail' doctor.pk %}"
+                        >
+                            View doctor
+                        </a>
+
+                    </div>
+
+                </div>
+
+            </article>
+
+        {% empty %}
+
+            <!-- =========================
+                 Empty State
+            ========================= -->
+
+            <div
+                class="empty"
+                style="grid-column: 1 / -1"
+            >
+                No doctors match your filters.
+            </div>
+
+        {% endfor %}
+
+    </div>
+
+
+    <!-- =========================
+         Pagination
+    ========================= -->
+
+    {% if page_obj.has_other_pages %}
+
+        <div
+            style="
+                display: flex;
+                justify-content: center;
+                gap: 8px;
+                margin-top: 25px;
+            "
+        >
+
+            {% if page_obj.has_previous %}
+
+                <a
+                    class="btn btn-secondary btn-sm"
+                    href="?page={{ page_obj.previous_page_number }}&q={{ q }}&specialty={{ selected_specialty }}&min_rating={{ selected_min_rating }}&sort={{ selected_sort }}"
+                >
+                    Previous
+                </a>
+
+            {% endif %}
+
+
+            <!-- Current Page -->
+
+            <span class="btn btn-secondary btn-sm">
+
+                Page
+                {{ page_obj.number }}
+                of
+                {{ page_obj.paginator.num_pages }}
+
+            </span>
+
+
+            {% if page_obj.has_next %}
+
+                <a
+                    class="btn btn-secondary btn-sm"
+                    href="?page={{ page_obj.next_page_number }}&q={{ q }}&specialty={{ selected_specialty }}&min_rating={{ selected_min_rating }}&sort={{ selected_sort }}"
+                >
+                    Next
+                </a>
+
+            {% endif %}
+
+        </div>
+
+    {% endif %}
+
+</div>
+
+{% endblock %}
+

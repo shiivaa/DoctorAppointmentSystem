@@ -1,0 +1,267 @@
+
+{% extends 'base.html' %}
+
+{% block title %}
+    Dr. {{ doctor.user.get_full_name }} | CarePoint
+{% endblock %}
+
+{% block content %}
+
+<div class="container">
+
+    <!-- =========================
+         Page Header
+    ========================= -->
+
+    <div class="page-header">
+
+        <p>
+
+            <a
+                class="muted"
+                href="{% url 'doctor:list' %}"
+            >
+                ← Back to doctors
+            </a>
+
+        </p>
+
+    </div>
+
+
+    <!-- =========================
+         Doctor Details
+    ========================= -->
+
+    <div class="detail-grid">
+
+
+        <!-- =========================
+             Doctor Profile
+        ========================= -->
+
+        <section class="card profile-card">
+
+            <div class="profile-head">
+
+
+                <!-- Doctor Photo -->
+
+                {% if doctor.photo %}
+
+                    <img
+                        class="large-avatar"
+                        src="{{ doctor.photo.url }}"
+                        alt="Dr. {{ doctor.user.get_full_name }}"
+                    >
+
+                {% else %}
+
+                    <div class="large-avatar">
+                        DR
+                    </div>
+
+                {% endif %}
+
+
+                <!-- Doctor Basic Information -->
+
+                <div>
+
+                    <h1 style="margin: 0">
+                        Dr.
+                        {{ doctor.user.get_full_name|default:doctor.user.username }}
+                    </h1>
+
+                    <div class="muted">
+                        {{ doctor.specialty.title }}
+                    </div>
+
+
+                    <!-- Rating -->
+
+                    <div
+                        class="rating"
+                        style="margin-top: 6px"
+                    >
+
+                        <span class="stars">
+                            ★
+                        </span>
+
+                        {{ doctor.avg_rating|default:'0'|floatformat:1 }}
+
+                        <span class="muted">
+                            ({{ doctor.feedbacks_count|default:0 }} reviews)
+                        </span>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- =========================
+                 Doctor Stats
+            ========================= -->
+
+            <div class="stat-row">
+
+
+                <!-- Visit Fee -->
+
+                <div class="stat">
+
+                    <span class="muted">
+                        Visit fee
+                    </span>
+
+                    <strong>
+                        {{ doctor.visit_fee }}
+                    </strong>
+
+                </div>
+
+
+                <!-- Visit Duration -->
+
+                <div class="stat">
+
+                    <span class="muted">
+                        Duration
+                    </span>
+
+                    <strong>
+                        {{ doctor.visit_duration }} min
+                    </strong>
+
+                </div>
+
+
+                <!-- Phone -->
+
+                <div class="stat">
+
+                    <span class="muted">
+                        Phone
+                    </span>
+
+                    <strong>
+                        {{ doctor.user.phone }}
+                    </strong>
+
+                </div>
+
+            </div>
+
+
+            <!-- =========================
+                 Doctor Biography
+            ========================= -->
+
+            <div style="margin-top: 22px">
+
+                <h3>
+                    About the doctor
+                </h3>
+
+                <p class="muted">
+                    {{ doctor.bio|default:'This doctor has not added a biography yet.' }}
+                </p>
+
+            </div>
+
+
+            <!-- =========================
+                 Actions
+            ========================= -->
+
+            <div class="hero-actions">
+
+                <a
+                    class="btn btn-primary"
+                    href="{% url 'appointment:doctor-appointment-days' doctor.pk %}"
+                >
+                    Book an appointment
+                </a>
+
+                <a
+                    class="btn btn-secondary"
+                    href="{% url 'show_feedbacks' doctor.pk %}"
+                >
+                    Read reviews
+                </a>
+
+            </div>
+
+        </section>
+
+
+        <!-- =========================
+             Professional Information
+        ========================= -->
+
+        <section class="card profile-card">
+
+            <h2 style="margin-top: 0">
+                Professional information
+            </h2>
+
+            <div class="list">
+
+
+                <!-- Address -->
+
+                <div class="list-item">
+
+                    <strong>
+                        Address
+                    </strong>
+
+                    <div class="muted">
+                        {{ doctor.address|default:'Not provided' }}
+                    </div>
+
+                </div>
+
+
+                <!-- Medical System Number -->
+
+                <div class="list-item">
+
+                    <strong>
+                        Medical system number
+                    </strong>
+
+                    <div class="muted">
+                        {{ doctor.medical_system_number|default:'Not provided' }}
+                    </div>
+
+                </div>
+
+
+                <!-- Availability -->
+
+                <div class="list-item">
+
+                    <strong>
+                        Availability
+                    </strong>
+
+                    <div class="muted">
+                        Choose a date to see generated appointment slots.
+                    </div>
+
+                </div>
+
+            </div>
+
+        </section>
+
+    </div>
+
+</div>
+
+{% endblock %}
+

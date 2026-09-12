@@ -1,25 +1,89 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Send OTP</title>
-</head>
-<body>
 
-    <h1>Login with OTP</h1>
+{% extends 'base.html' %}
 
-    <form method="POST" action="{% url 'send_otp' %}">
-        {% csrf_token %}
+{% block title %}
+    Sign in | CarePoint
+{% endblock %}
 
-        {{ form.phone.label_tag }}
-        {{ form.phone }}
-        {{ form.phone.errors }}
+{% block content %}
 
-        <br><br>
+<div class="container">
 
-        <button type="submit">Send OTP</button>
+    <div class="card form-card">
 
-    </form>
+        <!-- =========================
+             Header
+        ========================= -->
 
-</body>
-</html>
+        <span class="eyebrow">
+            Secure sign in
+        </span>
+
+        <h1>
+            Continue with your phone
+        </h1>
+
+        <p class="muted">
+            Enter your phone number and we will generate
+            a one-time verification code.
+        </p>
+
+
+        <!-- =========================
+             Sign In Form
+        ========================= -->
+
+        <form method="post">
+
+            {% csrf_token %}
+
+
+            <!-- =========================
+                 Form Errors
+            ========================= -->
+
+            {% if form.non_field_errors %}
+
+                <div class="non-field-errors">
+                    {{ form.non_field_errors }}
+                </div>
+
+            {% endif %}
+
+
+            <!-- =========================
+                 Phone Number
+            ========================= -->
+
+            <div class="field">
+
+                <label for="id_phone">
+                    Phone number
+                </label>
+
+                {{ form.phone }}
+
+                {{ form.phone.errors }}
+
+            </div>
+
+
+            <!-- =========================
+                 Submit
+            ========================= -->
+
+            <button
+                class="btn btn-primary btn-block"
+                type="submit"
+            >
+                Send verification code
+            </button>
+
+        </form>
+
+    </div>
+
+</div>
+
+{% endblock %}
+

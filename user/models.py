@@ -17,11 +17,11 @@ class User(AbstractUser):
         ('male', 'male'),
         ('female', 'female'),
     )
-    gender = models.CharField(max_length=10, choices=gender_choices, default='male')
-    national_code = models.CharField(max_length=10, unique=True)
-    birth_date = models.DateField()
-    phone = models.CharField(max_length=12, unique=True)
-    email = models.EmailField(unique=True)
+    gender = models.CharField(max_length=10, choices=gender_choices, default='male', blank=True, null=True)
+    national_code = models.CharField(max_length=10, unique=True, blank=True, null=True)
+    birth_date = models.DateField(blank=True, null=True)
+    phone = models.CharField(max_length=12, unique=True, blank=True, null=True)
+    email = models.EmailField(unique=True, blank=True, null=True)
 
     def __str__(self):
         return self.username

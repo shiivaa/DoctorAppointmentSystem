@@ -23,6 +23,7 @@ class Doctor(models.Model):
         default=30, help_text="duration of each visit in minutes(like: 20, 30, 60)"
     )
     bio = models.TextField(blank=True)
+    avatar = models.ImageField(upload_to="doctor/avatars/", null=True, blank=True)
 
     class Meta:
         ordering = ["user__last_name", "user__first_name"]
@@ -71,7 +72,7 @@ class WorkingShift(models.Model):
         if overlapping_shifts.exists():
             raise ValidationError("This time overlaps with the others.")
 
-        if hasattr(self, "doctor") and self.doctor and self.doctor.visit_duration:
+        if hasattr(self, "doctor") and self.doctor_id and self.doctor.visit_duration:
             total_minutes = (
                 (self.end_time.hour * 60 + self.end_time.minute) - (self.start_time.hour * 60 + self.start_time.minute)
             )

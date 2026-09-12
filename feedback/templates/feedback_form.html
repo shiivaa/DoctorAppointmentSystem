@@ -1,5 +1,6 @@
 {% extends 'base.html' %}
 
+<<<<<<< HEAD
 {% block content %}
 <div class="container my-5" style="max-width: 600px;">
     <div class="card shadow-sm border-0 rounded-4">
@@ -30,7 +31,123 @@
                     Submit Review
                 </button>
             </form>
-        </div>
-    </div>
-</div>
+=======
+{% block title %}
+    Leave feedback | CarePoint
 {% endblock %}
+
+{% block content %}
+
+<div class="container">
+
+    <div class="card form-card">
+
+        <!-- =========================
+             Header
+        ========================= -->
+
+        <span class="eyebrow">
+            Your experience matters
+        </span>
+
+        <h1>
+            Leave feedback
+        </h1>
+
+        <p class="muted">
+            Share your experience with Dr.
+            {{ appointment.doctor.user.get_full_name }}.
+        </p>
+
+
+        <!-- =========================
+             Form Errors
+        ========================= -->
+
+        {% if form.non_field_errors %}
+
+            <div class="non-field-errors">
+                {{ form.non_field_errors }}
+            </div>
+
+        {% endif %}
+
+
+        <!-- =========================
+             Feedback Form
+        ========================= -->
+
+        <form method="post">
+
+            {% csrf_token %}
+
+
+            <!-- Rating -->
+
+            <div class="field">
+
+                <label for="id_rate">
+                    Rating
+                </label>
+
+                {{ form.rate }}
+
+                {{ form.rate.errors }}
+
+            </div>
+
+
+            <!-- Comment -->
+
+            <div class="field">
+
+                <label for="id_comment">
+                    Comment
+                </label>
+
+                {{ form.comment }}
+
+                {{ form.comment.errors }}
+
+            </div>
+
+
+            <!-- Submit -->
+
+            <button
+                class="btn btn-primary btn-block"
+                type="submit"
+            >
+                Submit feedback
+            </button>
+
+        </form>
+
+
+        <!-- =========================
+             Back to Appointments
+        ========================= -->
+
+        <div
+            style="
+                margin-top: 14px;
+                text-align: center;
+            "
+        >
+
+            <a
+                class="muted"
+                href="{% url 'appointment:my-appointments' %}"
+            >
+                Back to appointments
+            </a>
+
+>>>>>>> 3428533c14a73ea2e6dbd724c8b28378e8fe9901
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}
+
