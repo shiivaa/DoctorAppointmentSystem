@@ -11,10 +11,10 @@ class FeedbackForm(forms.ModelForm):
             'comment': forms.Textarea(attrs={
                 'class': 'form-control',
                 'rows': 4,
-                'placeholder': _('Write your experience of last appointment')
+                'placeholder': 'Share your experience with the visit and the doctor...'
             }),
         }
         labels = {
-            'rating': _('Rank'),
-            'comment': _('Text of Comment'),
+            'rating': 'Your Rating',
+            'comment': 'Review / Comment',
         }
