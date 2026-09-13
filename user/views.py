@@ -111,7 +111,7 @@ def verify_otp(request):
 
         return redirect("complete_registration")
 
-    login(request, user)
+    login(request, user, backend='django.contrib.auth.backends.ModelBackend')
 
     del request.session["otp_phone"]
     del request.session["otp_code"]
@@ -235,7 +235,7 @@ def complete_registration(request):
 
     del request.session["otp_verified_phone"]
 
-    login(request, user)
+    login(request, user, backend='django.contrib.auth.backends.ModelBackend')
 
     return redirect("home")
 

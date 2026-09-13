@@ -30,11 +30,11 @@ def get_doctor_slots(doctor, selected_date):
     slots = []
 
     for shift in shifts:
-        current_time = shift.start_time
+        current_time = datetime.combine(selected_date, shift.start_time)
 
         while True:
 
-            slot_start = datetime.combine(selected_date,current_time)
+            slot_start = current_time
 
             slot_end = slot_start + timedelta(minutes=doctor.visit_duration)
 

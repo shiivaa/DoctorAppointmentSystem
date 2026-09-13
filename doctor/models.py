@@ -59,18 +59,19 @@ class WorkingShift(models.Model):
             if self.end_time <= self.start_time:
                 raise ValidationError({"end_time": "End time must be after start time."})
 
-        overlapping_shifts = WorkingShift.objects.filter(
-            doctor=self.doctor,
-            day_of_week=self.day_of_week,
-            start_time__lt=self.end_time,
-            end_time__gt=self.start_time,
-        )
+        if self.doctor_id:
+            overlapping_shifts = WorkingShift.objects.filter(
+                doctor_id=self.doctor_id,
+                day_of_week=self.day_of_week,
+                start_time__lt=self.end_time,
+                end_time__gt=self.start_time,
+            )
 
-        if self.pk:
-            overlapping_shifts = overlapping_shifts.exclude(pk=self.pk)
+            if self.pk:
+                overlapping_shifts = overlapping_shifts.exclude(pk=self.pk)
 
-        if overlapping_shifts.exists():
-            raise ValidationError("This time overlaps with the others.")
+            if overlapping_shifts.exists():
+                raise ValidationError("This time overlaps with the others.")
 
         if hasattr(self, "doctor") and self.doctor_id and self.doctor.visit_duration:
             total_minutes = (

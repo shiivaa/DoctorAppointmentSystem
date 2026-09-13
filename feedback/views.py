@@ -28,7 +28,7 @@ def feedback_create_view(request, appointment_pk):
         services.can_patient_submit_feedback(patient=patient, appointment=appointment)
     except PermissionDenied as e:
         messages.error(request, str(e))
-        return redirect('appointments:my_appointments')
+        return redirect('appointment:my-appointments')
 
     if request.method == 'POST':
         form = FeedbackForm(request.POST)
@@ -41,9 +41,9 @@ def feedback_create_view(request, appointment_pk):
 
             messages.success(
                 request,
-                "Congrat! Your feedback has been submitted successfully and waiting for confirmation."
+                "Congratulation! Your feedback has been submitted successfully and waiting for confirmation."
             )
-            return redirect('appointments:my_appointments')
+            return redirect('appointment:my-appointments')
     else:
         form = FeedbackForm()
 

@@ -3,8 +3,17 @@ from django.contrib.auth import get_user_model
 from datetime import date
 from .models import Patient
 
+import re
 
 User = get_user_model()
+
+def validate_phone(phone):
+    if not re.fullmatch(r'98\d{10}', phone):
+        raise forms.ValidationError(
+            "Phone number must start with 98 and contain exactly 12 digits"
+        )
+
+    return phone
 
 class SendOTPForm(forms.Form):
     phone = forms.CharField(
@@ -15,11 +24,7 @@ class SendOTPForm(forms.Form):
     def clean_phone(self):
         phone = self.cleaned_data["phone"]
 
-        if not phone.isdigit():
-            raise forms.ValidationError(
-                "Phone must contain only digits"
-            )
-        return phone
+        return validate_phone(phone)
 
 class VerifyOTPForm(forms.Form):
     code = forms.CharField(
@@ -84,7 +89,7 @@ class GoogleRegistrationForm(forms.Form):
                 "National code must contain only digits"
             )
 
-        if User.objects.get(national_code=national_code).exists():
+        if User.objects.filter(national_code=national_code).exists():
             raise forms.ValidationError(
                 "This national code already registered."
             )
