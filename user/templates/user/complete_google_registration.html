@@ -1,0 +1,97 @@
+{% extends 'base.html' %}
+
+{% block title %}
+    Complete Registration | CarePoint
+{% endblock %}
+
+{% block content %}
+
+<div class="container">
+
+    <div class="card form-card">
+
+        <span class="eyebrow">
+            Welcome to CarePoint
+        </span>
+
+        <h1>
+            Complete your registration
+        </h1>
+
+        <p class="muted">
+            Your Google account has been connected successfully.
+            Please complete the remaining information.
+        </p>
+
+        <form method="post" style="margin-top: 25px;">
+
+            {% csrf_token %}
+
+            {% if form.non_field_errors %}
+                <div class="form-errors">
+                    {{ form.non_field_errors }}
+                </div>
+            {% endif %}
+
+            <div class="form-group">
+                <label for="{{ form.username.id_for_label }}">
+                    Username
+                </label>
+                {{ form.username }}
+                {{ form.username.errors }}
+            </div>
+
+            <div class="form-group">
+                <label for="{{ form.first_name.id_for_label }}">
+                    First name
+                </label>
+                {{ form.first_name }}
+                {{ form.first_name.errors }}
+            </div>
+
+            <div class="form-group">
+                <label for="{{ form.last_name.id_for_label }}">
+                    Last name
+                </label>
+                {{ form.last_name }}
+                {{ form.last_name.errors }}
+            </div>
+
+            <div class="form-group">
+                <label for="{{ form.gender.id_for_label }}">
+                    Gender
+                </label>
+                {{ form.gender }}
+                {{ form.gender.errors }}
+            </div>
+
+            <div class="form-group">
+                <label for="{{ form.national_code.id_for_label }}">
+                    National code
+                </label>
+                {{ form.national_code }}
+                {{ form.national_code.errors }}
+            </div>
+
+            <div class="form-group">
+                <label for="{{ form.birth_date.id_for_label }}">
+                    Birth date
+                </label>
+                {{ form.birth_date }}
+                {{ form.birth_date.errors }}
+            </div>
+
+            <button
+                type="submit"
+                class="btn btn-primary btn-block"
+            >
+                Complete registration
+            </button>
+
+        </form>
+
+    </div>
+
+</div>
+
+{% endblock %}

@@ -5,7 +5,7 @@ from django.utils import timezone
 from django.contrib.auth import get_user_model, login, logout, authenticate
 from datetime import timedelta
 from .models import OTP, Patient, Wallet, Transaction
-from .forms import SendOTPForm, VerifyOTPForm, RegistrationForm, PatientProfileForm, LoginForm
+from .forms import SendOTPForm, VerifyOTPForm, RegistrationForm, PatientProfileForm, LoginForm, GoogleRegistrationForm
 from django.db.models import Count, Avg
 from doctor.models import Doctor
 
@@ -152,6 +152,41 @@ def login_user(request):
     login(request, user)
 
     return redirect("home")
+
+def complete_google_registration(request):
+    if not request.user.is_authenticated:
+        return redirect("sign_in")
+
+    if request.method == "GET":
+        form = GoogleRegistrationForm(
+            initial={
+                "first_name": request.user.first_name,
+                "last_name": request.user.last_name,
+            }
+        )
+
+        return render(request, "user/complete_google_registration.html",{
+            "form": form,
+        })
+
+    form = GoogleRegistrationForm
+
+    if not form.is_valid():
+        return render(request, "user/complete_google_registration.html", {
+            "form": form,
+        })
+
+    request.user.username = form.cleaned_data["username"]
+    request.user.first_name = form.cleaned_data["first_name"]
+    request.user.last_name = form.cleaned_data["last_name"]
+    request.user.gender = form.cleaned_data["gender"]
+    request.user.national_code = form.cleaned_data["national_code"]
+    request.user.birth_date = form.cleaned_data["birth_date"]
+
+    request.user.save()
+
+    return redirect("home")
+
 
 def complete_registration(request):
     phone = request.session.get("otp_verified_phone")

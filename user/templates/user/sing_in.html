@@ -1,5 +1,7 @@
 {% extends 'base.html' %}
 
+{% load socialaccount %}
+
 {% block title %}
     Sign in | CarePoint
 {% endblock %}
@@ -36,6 +38,13 @@
                 class="btn btn-secondary btn-block"
             >
                 Sign in with username and password
+            </a>
+
+            <a
+                href="{% provider_login_url 'google' process='login' %}"
+                class="btn btn-secondary btn-block"
+            >
+                Continue with Google
             </a>
 
         </div>
