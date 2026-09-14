@@ -9,7 +9,7 @@ class GoogleSocialAccountAdapter(DefaultSocialAccountAdapter):
         if sociallogin.is_existing:
             return
 
-        email = sociallogin.account.extra_data.get['email']
+        email = sociallogin.account.extra_data.get('email')
 
         if not email:
             return
