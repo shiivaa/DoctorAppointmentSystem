@@ -242,7 +242,7 @@ class FeedbackViewTests(FeedbackBaseTestCase):
         response = self.client.get(url)
 
      
-        self.assertRedirects(response, reverse('appointments:my_appointments'))
+        self.assertRedirects(response, reverse('appointment:my-appointments'))
 
     def test_create_view_get_success(self):
         self.client.force_login(self.user1)
@@ -263,7 +263,7 @@ class FeedbackViewTests(FeedbackBaseTestCase):
         response = self.client.post(url, post_data)
 
       
-        self.assertRedirects(response, reverse('appointments:my_appointments'))
+        self.assertRedirects(response, reverse('appointment:my-appointments'))
 
   
         feedback = Feedback.objects.get(appointment=self.past_appointment)
