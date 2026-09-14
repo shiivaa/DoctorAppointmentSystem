@@ -1,10 +1,10 @@
-version: '3.8'
+
 
 services:
   web:
     build: .
     container_name: doctor_appointment_django
-    command: gunicorn --bind 0.0.0.0:8000 DoctorAppointmentSystem.wsgi:application
+    command: gunicorn --bind 0.0.0.0:8000 DoctorAppointment.wsgi:application
     volumes:
       - .:/app
     ports:

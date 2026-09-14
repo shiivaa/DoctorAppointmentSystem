@@ -25,13 +25,13 @@ class FeedbackBaseTestCase(TestCase):
         self.user1 = User.objects.create_user(
             username="patient1", password="password123", email="p1@example.com"
         )
-        self.patient1 = Patient.objects.create(user=self.user1)
+        self.patient1 = Patient.objects.create(user=self.user1, insurance_number='123456789')
 
        
         self.user2 = User.objects.create_user(
             username="patient2", password="password123", email="p2@example.com"
         )
-        self.patient2 = Patient.objects.create(user=self.user2)
+        self.patient2 = Patient.objects.create(user=self.user2, insurance_number='987654321')
 
        
         self.regular_user = User.objects.create_user(
