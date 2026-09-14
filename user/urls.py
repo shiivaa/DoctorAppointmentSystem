@@ -12,4 +12,5 @@ urlpatterns = [
     path("wallet/transactions/", views.transactions, name="wallet_transactions"),
     path("login/", views.login_user, name="login_user"),
     path("sign-in/", views.sign_in, name="sign_in"),
+    path("complete-google-registration/", views.complete_google_registration, name="complete_google_registration"),
 ]

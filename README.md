@@ -66,7 +66,7 @@ The project is divided into several Django apps, with each app responsible for a
     │   └── other_documents/
     │
     ├── .dockerignore
-    ├── .env
+    ├── .env.example
     ├── .gitignore
     ├── Dockerfile
     ├── docker-compose.yml
@@ -283,7 +283,44 @@ The project uses Django's authentication system with a custom `User` model.
 
 The custom user model is configured using:
 
-    AUTH_USER_MODEL = "user.User"
+```
+AUTH_USER_MODEL = "user.User"
+```
+
+The project supports the following authentication methods:
+
+* Phone number and OTP
+* Username and password
+* Google OAuth 2.0
+
+### Phone and OTP Authentication
+
+For phone-based authentication:
+
+1. The user enters their phone number.
+2. An OTP code is generated.
+3. The user verifies the OTP.
+4. New users complete the registration form.
+5. The user account is created.
+6. The user is logged in.
+
+### Google Authentication
+
+Google authentication is implemented using `django-allauth` and OAuth 2.0.
+
+The Google OAuth credentials are loaded from environment variables:
+
+```
+GOOGLE_CLIENT_ID
+GOOGLE_CLIENT_SECRET
+```
+
+These values should be stored in the local `.env` file and must not be committed to Git.
+
+For local development, create a `.env` file based on `.env.example` and provide the required Google OAuth credentials.
+
+Existing users can sign in with Google using their registered email address. New Google users are redirected to a registration form to complete the required account information before continuing to the application.
+
 
 The project also includes OTP-based verification for registration and authentication.
 
@@ -413,6 +450,8 @@ This folder can contain:
 - Docker
 - Database
 - Email services
+- Django-allauth
+- Google OAuth 2.0
 
 ## Project Status
 

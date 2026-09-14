@@ -27,6 +27,8 @@ def can_patient_submit_feedback(patient: Patient, appointment: Appointment):
 def get_doctor_average_rating(doctor):
     #calculate average of confirmed rate
     result = Feedback.objects.filter(doctor=doctor, is_confirmed=True).aggregate(average_rating=Avg('rate') )
-    value=result.get('average_rating')
+
+    average_rating = result['average_rating']
+
     #if there is no confirmed rate return 0
-    return round(value, 1) if value is not None else 0.0
+    return round(average_rating, 1) if average_rating is not None else 0.0

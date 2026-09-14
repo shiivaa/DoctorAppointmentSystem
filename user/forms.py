@@ -3,8 +3,17 @@ from django.contrib.auth import get_user_model
 from datetime import date
 from .models import Patient
 
+import re
 
 User = get_user_model()
+
+def validate_phone(phone):
+    if not re.fullmatch(r'98\d{10}', phone):
+        raise forms.ValidationError(
+            "Phone number must start with 98 and contain exactly 12 digits"
+        )
+
+    return phone
 
 class SendOTPForm(forms.Form):
     phone = forms.CharField(
@@ -15,11 +24,7 @@ class SendOTPForm(forms.Form):
     def clean_phone(self):
         phone = self.cleaned_data["phone"]
 
-        if not phone.isdigit():
-            raise forms.ValidationError(
-                "Phone must contain only digits"
-            )
-        return phone
+        return validate_phone(phone)
 
 class VerifyOTPForm(forms.Form):
     code = forms.CharField(
@@ -39,6 +44,65 @@ class VerifyOTPForm(forms.Form):
 class LoginForm(forms.Form):
     username = forms.CharField(max_length=40)
     password = forms.CharField(widget=forms.PasswordInput)
+
+class GoogleRegistrationForm(forms.Form):
+    username = forms.CharField(
+        max_length=30
+    )
+
+    first_name = forms.CharField(
+        max_length=150
+    )
+
+    last_name = forms.CharField(
+        max_length=150
+    )
+
+    gender = forms.ChoiceField(
+        choices=User.gender_choices
+    )
+
+    national_code = forms.CharField(
+        min_length=10,
+        max_length=10
+    )
+
+    birth_date = forms.DateField(
+        widget=forms.DateInput(attrs={"type": "date"})
+    )
+
+    def clean_username(self):
+        username = self.cleaned_data["username"]
+
+        if User.objects.filter(username=username).exists():
+            raise forms.ValidationError(
+                "User with this username already exists."
+            )
+
+        return username
+
+    def clean_national_code(self):
+        national_code = self.cleaned_data["national_code"]
+
+        if not national_code.isdigit():
+            raise forms.ValidationError(
+                "National code must contain only digits"
+            )
+
+        if User.objects.filter(national_code=national_code).exists():
+            raise forms.ValidationError(
+                "This national code already registered."
+            )
+
+        return national_code
+
+    def clean_birth_date(self):
+        birth_date = self.cleaned_data["birth_date"]
+
+        if birth_date > date.today():
+            raise forms.ValidationError(
+                "Birth date cannot be in the future."
+            )
 
 class RegistrationForm(forms.Form):
     username = forms.CharField(

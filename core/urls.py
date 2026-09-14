@@ -26,6 +26,7 @@ urlpatterns = [
     path('appointment/', include('appointment.urls')),
     path('feedback/', include('feedback.urls')),
     path("", user_views.home, name="home"),
+    path("accounts/", include('allauth.urls')),
 ]
 
 if settings.DEBUG:
