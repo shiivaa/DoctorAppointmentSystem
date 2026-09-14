@@ -185,6 +185,8 @@ MAILERS = {
     },
 }
 
+DEFAULT_FROM_EMAIL = 'noreply@carepoint.com'
+
 
 SESSION_ENGINE = 'django.contrib.sessions.backends.db'
 
