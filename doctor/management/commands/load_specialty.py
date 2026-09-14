@@ -6,7 +6,7 @@ from django.utils.text import slugify
 class Command(BaseCommand):
     help = " Add a standard catalog of medical specialties to database ."
 
-    # Curated medical specialty dataset
+   
     SPECIALTIES_DATA = [
         {
             "name": "Cardiology",
@@ -154,12 +154,18 @@ class Command(BaseCommand):
         updated_count = 0
 
         self.stdout.write(self.style.HTTP_INFO("Seeding specialties into database..."))
+        for item in self.SPECIALTIES_DATA:
+            title_text = item["name"]  # یا اگر اسم فیلد عنوان در دیکشنری name است
+            slug = slugify(title_text, allow_unicode=True)
 
-        for title in self.SPECIALTIES_DATA:
-            slug = slugify(title,allow_unicode=True)
             specialty, created = Specialty.objects.update_or_create(
                 slug=slug,
-                defaults={"title":title},
+                defaults={
+                    "title": title_text,
+                    # اگر مدل فیلدهای description و icon را هم دارد:
+                    # "description": item.get("description", ""),
+                    # "icon": item.get("icon", ""),
+                },
             )
             if created:
                 created_count += 1
@@ -173,3 +179,4 @@ class Command(BaseCommand):
                f"total in database {Specialty.objects.count()}"
             )
         )
+       
