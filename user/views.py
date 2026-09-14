@@ -1,5 +1,7 @@
 from decimal import Decimal
 
+from django.contrib import messages as m
+from django.core.checks import messages
 from django.shortcuts import render, redirect
 from django.utils import timezone
 from django.contrib.auth import get_user_model, login, logout, authenticate
@@ -351,25 +353,40 @@ def wallet(request):
     )
 
     if request.method == "POST":
-        amount = int(request.POST["amount"])
+        try:
+            amount = Decimal(request.POST["amount"])
+        except (ValueError, TypeError):
+            m.error(request, "Please enter a valid amount.")
+            return redirect("wallet")
 
-        if amount:
-            wallet.balance += Decimal(amount)
-            wallet.save()
+        MAX_BALANCE = Decimal("99999999.99")
 
-            Transaction.objects.create(
-                wallet=wallet,
-                amount=amount,
-                type="deposit",
-                description="Wallet Charge"
+        if amount <= 0:
+            m.error(request, "Amount must be greater than zero.")
+            return redirect("wallet")
+
+        if amount > MAX_BALANCE or wallet.balance + amount > MAX_BALANCE:
+            m.error(
+                request,
+                "You can't charge your wallet above 99,999,999.99."
             )
+            return redirect("wallet")
+
+        wallet.balance += amount
+        wallet.save()
+
+        Transaction.objects.create(
+            wallet=wallet,
+            amount=amount,
+            type="deposit",
+            description="Wallet Charge"
+        )
 
         return redirect("wallet")
 
-    return render(request, "user/wallet.html",{
+    return render(request, "user/wallet.html", {
         "wallet": wallet
-        }
-    )
+    })
 
 def transactions(request):
     if not request.user.is_authenticated:
