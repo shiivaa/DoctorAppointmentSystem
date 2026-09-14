@@ -13,6 +13,8 @@ from .models import Appointment
 
 from .services import get_doctor_slots
 
+from django.core.mail import send_mail
+
 
 # create weekdays schedule for doctor - user can select one
 def doctor_working_days(request, doctor_pk):
@@ -205,6 +207,20 @@ def book_appointment(request, doctor_pk):
             doctor_pk=doctor.pk,
             date=start_time.date().strftime('%Y-%m-%d')
         )
+
+    send_mail(
+        subject="Appointment Confirmation",
+        message=f'''
+    Your appointment has been confirmed.
+
+    Doctor: Dr. {doctor.user.first_name} {doctor.user.last_name}
+    Date: {appointment.start_time.date()}
+    Time: {appointment.start_time.strftime('%H:%M')}
+    Visit fee: {appointment.doctor.visit_fee}
+    ''',
+        from_email=None,
+        recipient_list=[appointment.patient.user.email],
+    )
 
     messages.success(request,'Your appointment was booked successfully.')
 
