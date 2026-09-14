@@ -7,7 +7,7 @@ class FeedbackForm(forms.ModelForm):
         model = Feedback
         fields = ['rate', 'comment']
         widgets = {
-            'rating': forms.Select(attrs={'class': 'form-select'}),
+            'rate': forms.Select(attrs={'class': 'form-select'}),
             'comment': forms.Textarea(attrs={
                 'class': 'form-control',
                 'rows': 4,
@@ -15,6 +15,6 @@ class FeedbackForm(forms.ModelForm):
             }),
         }
         labels = {
-            'rating': 'Your Rating',
+            'rate': 'Your Rating',
             'comment': 'Review / Comment',
         }
