@@ -1,5 +1,3 @@
-from django.test import TestCase
-
 from datetime import timedelta
 from django.test import TestCase
 from django.urls import reverse
@@ -223,14 +221,14 @@ class FeedbackServicesTest(FeedbackBaseTestCase):
 class FeedbackViewTests(FeedbackBaseTestCase):
 
     def test_create_view_anonymous_redirects_to_login(self):
-        url = reverse('feedback:add_feedback', kwargs={'appointment_pk': self.past_appointment.pk})
+        url = reverse('add_feedback', kwargs={'appointment_pk': self.past_appointment.pk})
         response = self.client.get(url)
         self.assertEqual(response.status_code, 302)
         self.assertIn('/login/', response.url)
 
     def test_create_view_non_patient_user_forbidden(self):
         self.client.force_login(self.regular_user)
-        url = reverse('feedback:add_feedback', kwargs={'appointment_pk': self.past_appointment.pk})
+        url = reverse('add_feedback', kwargs={'appointment_pk': self.past_appointment.pk})
         response = self.client.get(url)
       
         self.assertEqual(response.status_code, 403)
@@ -238,15 +236,15 @@ class FeedbackViewTests(FeedbackBaseTestCase):
     def test_create_view_permission_denied_redirects_with_message(self):
     
         self.client.force_login(self.user2)
-        url = reverse('feedback:add_feedback', kwargs={'appointment_pk': self.past_appointment.pk})
+        url = reverse('add_feedback', kwargs={'appointment_pk': self.past_appointment.pk})
         response = self.client.get(url)
 
      
-        self.assertRedirects(response, reverse('appointments:my_appointments'))
+        self.assertRedirects(response, reverse('appointment:my-appointments'))
 
     def test_create_view_get_success(self):
         self.client.force_login(self.user1)
-        url = reverse('feedback:add_feedback', kwargs={'appointment_pk': self.past_appointment.pk})
+        url = reverse('add_feedback', kwargs={'appointment_pk': self.past_appointment.pk})
         response = self.client.get(url)
 
         self.assertEqual(response.status_code, 200)
@@ -255,7 +253,7 @@ class FeedbackViewTests(FeedbackBaseTestCase):
 
     def test_create_view_post_success(self):
         self.client.force_login(self.user1)
-        url = reverse('feedback:add_feedback', kwargs={'appointment_pk': self.past_appointment.pk})
+        url = reverse('add_feedback', kwargs={'appointment_pk': self.past_appointment.pk})
         post_data = {
             'rate': Feedback.Rate.EXCELLENT,
             'comment': 'Exceptional care!'
@@ -263,7 +261,7 @@ class FeedbackViewTests(FeedbackBaseTestCase):
         response = self.client.post(url, post_data)
 
       
-        self.assertRedirects(response, reverse('appointments:my_appointments'))
+        self.assertRedirects(response, reverse('appointment:my-appointments'))
 
   
         feedback = Feedback.objects.get(appointment=self.past_appointment)
@@ -279,7 +277,7 @@ class FeedbackViewTests(FeedbackBaseTestCase):
         Feedback.objects.create(patient=self.patient2, doctor=self.doctor, rate=4, is_confirmed=True, comment="Good")
         Feedback.objects.create(patient=self.patient1, doctor=self.doctor, rate=1, is_confirmed=False, comment="Pending")
 
-        url = reverse('feedback:show_feedbacks', kwargs={'doctor_pk': self.doctor.pk})
+        url = reverse('show_feedbacks', kwargs={'doctor_pk': self.doctor.pk})
         response = self.client.get(url)
 
         self.assertEqual(response.status_code, 200)
