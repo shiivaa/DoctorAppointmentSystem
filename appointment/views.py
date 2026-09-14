@@ -2,7 +2,6 @@ from datetime import timedelta, datetime
 
 from django.shortcuts import get_object_or_404, redirect, render
 from django.contrib import messages
-from django.core.exceptions import PermissionDenied
 from django.db import IntegrityError, transaction
 from django.utils import timezone
 from django.contrib.auth.decorators import login_required
@@ -91,9 +90,10 @@ def book_appointment(request, doctor_pk):
     patient = getattr(request.user,'patient',None)
 
     if patient is None:
-        raise PermissionDenied(
-            'Only patients can book appointments.'
+        messages.error(request,
+            'Complete your profile information for booking a visit time .'
         )
+        return redirect('update_patient_profile')
 
     # Get selected appointment start time from request
     start_time_string = request.POST.get('start_time')
@@ -223,7 +223,10 @@ def my_appointments(request):
     patient = getattr(request.user,'patient',None)
 
     if patient is None:
-        raise PermissionDenied('Only patients can view their appointments.' )
+        messages.error(request,
+            'Complete your profile information please! then you see your appointments.'
+        )
+        return redirect('update_patient_profile')
 
     # Get patient's appointments
 
