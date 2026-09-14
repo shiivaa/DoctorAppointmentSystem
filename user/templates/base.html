@@ -772,7 +772,7 @@
                     Doctors
                 </a>
 
-                {% if user.is_authenticated %}
+                {% if user.is_authenticated and not user.is_staff %}
 
                     <a href="{% url 'appointment:my-appointments' %}">
                         My Appointments

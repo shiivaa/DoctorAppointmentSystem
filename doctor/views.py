@@ -57,7 +57,7 @@ def doctor_list(request):
     return render(request, "doctor/doctor_list.html", context)
 
 
-@login_required
+@login_required(login_url="sign_in")
 def doctor_detail(request, pk):
     doctor = get_object_or_404(
         Doctor.objects.select_related("user", "specialty")
